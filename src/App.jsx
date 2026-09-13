@@ -1,16 +1,20 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import HeroSurface from './components/HeroSurface';
 import DecadeElevator from './components/DecadeElevator';
 import SeasonCard from './components/SeasonCard';
 import MilestoneCard from './components/MilestoneCard';
 import BedrockFooter from './components/BedrockFooter';
+import DesignStudio from './components/DesignStudio';
 import f1Data from './data/f1Data.json';
 
 export default function App() {
+  // Theme state: 'clean' (Neal.fun Clean) | 'editorial' (Modern Magazine) | 'twilight' (Velvety Dark)
+  const [activeTheme, setActiveTheme] = useState('clean');
   const [globalViewMode, setGlobalViewMode] = useState('drivers');
   const [currentYear, setCurrentYear] = useState(2025);
   const [searchQuery, setSearchQuery] = useState('');
+
   const seasons = f1Data.seasons || [];
   const milestones = f1Data.milestones || [];
 
@@ -73,30 +77,41 @@ export default function App() {
     const q = searchQuery.toLowerCase().trim();
 
     return seasons.filter(s => {
-      // Check year
       if (s.year.toString().includes(q)) return true;
-      // Check era
       if (s.era?.name?.toLowerCase().includes(q)) return true;
-      // Check drivers
       const matchesDriver = s.drivers?.some(d => 
         d.name?.toLowerCase().includes(q) || 
         d.team?.toLowerCase().includes(q)
       );
       if (matchesDriver) return true;
-      // Check constructors
       const matchesConstructor = s.constructors?.some(c => 
         c.name?.toLowerCase().includes(q)
       );
       if (matchesConstructor) return true;
-
       return false;
     });
   }, [seasons, searchQuery]);
 
+  // Dynamic theme wrapper styling
+  const themeContainerClass = 
+    activeTheme === 'twilight'
+      ? 'bg-[#0E131B] text-slate-100 border-slate-800'
+      : activeTheme === 'editorial'
+        ? 'bg-[#F5F2EB] text-stone-900 border-stone-300'
+        : 'bg-[#FAF8F5] text-stone-900 border-stone-200';
+
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 selection:bg-red-600 selection:text-white relative">
+    <div className={`min-h-screen transition-colors duration-300 relative ${themeContainerClass}`}>
       
-      {/* Top Sticky Telemetry Header */}
+      {/* Design Direction Lab / Showcase Bar */}
+      <DesignStudio
+        activeTheme={activeTheme}
+        setActiveTheme={setActiveTheme}
+        sampleSeason={seasons[1]} // 2024 sample
+        sampleMilestone={milestones[0]} // 2021 sample
+      />
+
+      {/* Top Sticky Header */}
       <Header
         currentYear={currentYear}
         currentEra={currentEra}
@@ -105,39 +120,42 @@ export default function App() {
         onJumpToYear={handleJumpToYear}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        activeTheme={activeTheme}
       />
 
       {/* Surface Hero (2025 Entry) */}
       <HeroSurface
         onStartDive={() => handleJumpToYear(2025)}
         onJumpToYear={handleJumpToYear}
+        activeTheme={activeTheme}
       />
 
-      {/* Floating Decade Elevator (Fast-Travel Scrub Bar) */}
+      {/* Floating Decade Elevator */}
       <DecadeElevator
         currentYear={currentYear}
         onJumpToYear={handleJumpToYear}
+        activeTheme={activeTheme}
       />
 
       {/* Search status notification */}
       {searchQuery.trim() && (
         <div className="max-w-4xl mx-auto px-4 mt-6">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-3 px-4 flex items-center justify-between text-xs font-telemetry">
-            <span className="text-neutral-300">
-              Showing <strong className="text-red-400">{filteredSeasons.length}</strong> seasons matching "{searchQuery}"
+          <div className="p-3 px-4 rounded-xl border flex items-center justify-between text-xs bg-black/5 dark:bg-white/5 border-inherit">
+            <span>
+              Showing <strong className="font-bold">{filteredSeasons.length}</strong> seasons matching "{searchQuery}"
             </span>
             <button
               onClick={() => setSearchQuery('')}
-              className="text-neutral-500 hover:text-white underline"
+              className="opacity-70 hover:opacity-100 underline"
             >
-              Clear filter
+              Clear search
             </button>
           </div>
         </div>
       )}
 
       {/* Main Continuous Descent Stream */}
-      <main className="px-4 py-8 max-w-5xl mx-auto">
+      <main className="px-4 py-6 max-w-5xl mx-auto">
         {filteredSeasons.map(season => {
           const milestone = milestonesByYear[season.year];
 
@@ -146,25 +164,29 @@ export default function App() {
               <SeasonCard
                 season={season}
                 globalViewMode={globalViewMode}
+                activeTheme={activeTheme}
               />
 
-              {/* Dramatic Drive to Survive milestone interludes */}
+              {/* Dramatic story milestone interludes */}
               {!searchQuery && milestone && (
-                <MilestoneCard milestone={milestone} />
+                <MilestoneCard 
+                  milestone={milestone} 
+                  activeTheme={activeTheme} 
+                />
               )}
             </React.Fragment>
           );
         })}
 
         {filteredSeasons.length === 0 && (
-          <div className="text-center py-20 bg-neutral-900/40 rounded-2xl border border-neutral-800 my-12">
-            <div className="font-racing text-2xl text-neutral-300">No Seasons Found</div>
-            <p className="text-sm text-neutral-500 font-telemetry mt-2">
+          <div className="text-center py-20 rounded-2xl border border-inherit my-12 opacity-80">
+            <div className="text-xl font-bold">No Seasons Found</div>
+            <p className="text-xs mt-2 opacity-60">
               No results matched your search "{searchQuery}". Try searching "Schumacher", "Ferrari", "1994", or "Senna".
             </p>
             <button
               onClick={() => setSearchQuery('')}
-              className="mt-4 px-4 py-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-xs font-telemetry text-white"
+              className="mt-4 px-4 py-2 rounded-lg border border-inherit text-xs font-medium"
             >
               Reset Search
             </button>
@@ -173,7 +195,10 @@ export default function App() {
       </main>
 
       {/* Bedrock Footer (1950 Silverstone) */}
-      <BedrockFooter onReturnToSurface={() => handleJumpToYear(2025)} />
+      <BedrockFooter 
+        onReturnToSurface={() => handleJumpToYear(2025)} 
+        activeTheme={activeTheme} 
+      />
 
     </div>
   );

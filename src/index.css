@@ -14,6 +14,14 @@
   font-family: 'Chakra Petch', sans-serif;
 }
 
+.font-editorial {
+  font-family: 'Newsreader', Georgia, serif;
+}
+
+.font-friendly {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
 /* Custom subtle scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
