@@ -2,24 +2,18 @@
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #101319;
+    color: #F1F5F9;
   }
 }
 
-.font-telemetry {
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.font-racing {
-  font-family: 'Chakra Petch', sans-serif;
-}
-
-.font-editorial {
-  font-family: 'Newsreader', Georgia, serif;
-}
-
-.font-friendly {
+.font-display {
   font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 /* Custom subtle scrollbar */
@@ -28,34 +22,34 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #101319;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #262626;
+  background: #272F3D;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #dc2626;
+  background: #F43F5E;
 }
 
-/* Depth radar pulse */
-@keyframes radar-pulse {
+/* Gentle glow pulse */
+@keyframes ambient-glow {
   0% {
-    transform: scale(0.95);
-    opacity: 0.8;
+    opacity: 0.5;
+    transform: scale(0.98);
   }
   50% {
-    transform: scale(1.05);
-    opacity: 0.3;
+    opacity: 0.9;
+    transform: scale(1.02);
   }
   100% {
-    transform: scale(0.95);
-    opacity: 0.8;
+    opacity: 0.5;
+    transform: scale(0.98);
   }
 }
 
-.animate-radar {
-  animation: radar-pulse 3s infinite ease-in-out;
+.animate-glow {
+  animation: ambient-glow 4s infinite ease-in-out;
 }

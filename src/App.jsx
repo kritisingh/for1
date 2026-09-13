@@ -5,12 +5,9 @@ import DecadeElevator from './components/DecadeElevator';
 import SeasonCard from './components/SeasonCard';
 import MilestoneCard from './components/MilestoneCard';
 import BedrockFooter from './components/BedrockFooter';
-import DesignStudio from './components/DesignStudio';
 import f1Data from './data/f1Data.json';
 
 export default function App() {
-  // Theme state: 'clean' (Neal.fun Clean) | 'editorial' (Modern Magazine) | 'twilight' (Velvety Dark)
-  const [activeTheme, setActiveTheme] = useState('clean');
   const [globalViewMode, setGlobalViewMode] = useState('drivers');
   const [currentYear, setCurrentYear] = useState(2025);
   const [searchQuery, setSearchQuery] = useState('');
@@ -92,25 +89,9 @@ export default function App() {
     });
   }, [seasons, searchQuery]);
 
-  // Dynamic theme wrapper styling
-  const themeContainerClass = 
-    activeTheme === 'twilight'
-      ? 'bg-[#0E131B] text-slate-100 border-slate-800'
-      : activeTheme === 'editorial'
-        ? 'bg-[#F5F2EB] text-stone-900 border-stone-300'
-        : 'bg-[#FAF8F5] text-stone-900 border-stone-200';
-
   return (
-    <div className={`min-h-screen transition-colors duration-300 relative ${themeContainerClass}`}>
+    <div className="min-h-screen bg-[#101319] text-[#F1F5F9] relative selection:bg-rose-500 selection:text-white">
       
-      {/* Design Direction Lab / Showcase Bar */}
-      <DesignStudio
-        activeTheme={activeTheme}
-        setActiveTheme={setActiveTheme}
-        sampleSeason={seasons[1]} // 2024 sample
-        sampleMilestone={milestones[0]} // 2021 sample
-      />
-
       {/* Top Sticky Header */}
       <Header
         currentYear={currentYear}
@@ -120,33 +101,30 @@ export default function App() {
         onJumpToYear={handleJumpToYear}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        activeTheme={activeTheme}
       />
 
       {/* Surface Hero (2025 Entry) */}
       <HeroSurface
         onStartDive={() => handleJumpToYear(2025)}
         onJumpToYear={handleJumpToYear}
-        activeTheme={activeTheme}
       />
 
       {/* Floating Decade Elevator */}
       <DecadeElevator
         currentYear={currentYear}
         onJumpToYear={handleJumpToYear}
-        activeTheme={activeTheme}
       />
 
       {/* Search status notification */}
       {searchQuery.trim() && (
         <div className="max-w-4xl mx-auto px-4 mt-6">
-          <div className="p-3 px-4 rounded-xl border flex items-center justify-between text-xs bg-black/5 dark:bg-white/5 border-inherit">
-            <span>
-              Showing <strong className="font-bold">{filteredSeasons.length}</strong> seasons matching "{searchQuery}"
+          <div className="p-3 px-4 rounded-xl border border-[#27303E] bg-[#161B24] flex items-center justify-between text-xs">
+            <span className="text-slate-300">
+              Showing <strong className="text-rose-400 font-bold">{filteredSeasons.length}</strong> seasons matching "{searchQuery}"
             </span>
             <button
               onClick={() => setSearchQuery('')}
-              className="opacity-70 hover:opacity-100 underline"
+              className="text-slate-400 hover:text-white underline"
             >
               Clear search
             </button>
@@ -155,7 +133,7 @@ export default function App() {
       )}
 
       {/* Main Continuous Descent Stream */}
-      <main className="px-4 py-6 max-w-5xl mx-auto">
+      <main className="px-4 py-8 max-w-5xl mx-auto">
         {filteredSeasons.map(season => {
           const milestone = milestonesByYear[season.year];
 
@@ -164,29 +142,25 @@ export default function App() {
               <SeasonCard
                 season={season}
                 globalViewMode={globalViewMode}
-                activeTheme={activeTheme}
               />
 
               {/* Dramatic story milestone interludes */}
               {!searchQuery && milestone && (
-                <MilestoneCard 
-                  milestone={milestone} 
-                  activeTheme={activeTheme} 
-                />
+                <MilestoneCard milestone={milestone} />
               )}
             </React.Fragment>
           );
         })}
 
         {filteredSeasons.length === 0 && (
-          <div className="text-center py-20 rounded-2xl border border-inherit my-12 opacity-80">
-            <div className="text-xl font-bold">No Seasons Found</div>
-            <p className="text-xs mt-2 opacity-60">
+          <div className="text-center py-20 rounded-2xl border border-[#222A38] bg-[#161B24]/40 my-12">
+            <div className="font-display text-xl font-bold text-slate-200">No Seasons Found</div>
+            <p className="text-xs text-slate-400 mt-2">
               No results matched your search "{searchQuery}". Try searching "Schumacher", "Ferrari", "1994", or "Senna".
             </p>
             <button
               onClick={() => setSearchQuery('')}
-              className="mt-4 px-4 py-2 rounded-lg border border-inherit text-xs font-medium"
+              className="mt-4 px-4 py-2 rounded-xl bg-[#202735] hover:bg-[#2A3345] text-xs text-white font-medium transition-colors"
             >
               Reset Search
             </button>
@@ -195,10 +169,7 @@ export default function App() {
       </main>
 
       {/* Bedrock Footer (1950 Silverstone) */}
-      <BedrockFooter 
-        onReturnToSurface={() => handleJumpToYear(2025)} 
-        activeTheme={activeTheme} 
-      />
+      <BedrockFooter onReturnToSurface={() => handleJumpToYear(2025)} />
 
     </div>
   );
