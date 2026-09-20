@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Trophy, Car, ChevronDown, ChevronUp, Award, AlertCircle, Plane } from 'lucide-react';
 import RealCarThumbnail from './RealCarThumbnail';
 import { SEASON_CARD_PALETTES } from '../data/themeColors';
+import { getLocalDriverPortrait } from '../data/localDriverPortraits';
+import { getDriverPortrait } from '../data/driverPortraits';
 
 export default function SeasonCard({ 
   season, 
@@ -32,13 +34,8 @@ export default function SeasonCard({
   const restConstructors = constructorList.slice(3, 10);
 
   const championTeam = top3Constructors[0]?.name || top3Drivers[0]?.team || 'Grand Prix';
-
-  const getInitials = name => {
-    if (!name) return 'F1';
-    const parts = name.split(' ');
-    if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-    return name.slice(0, 2).toUpperCase();
-  };
+  const championDriver = top3Drivers[0];
+  const championPortrait = (championDriver?.name ? getLocalDriverPortrait(championDriver.name) : null) || championDriver?.portrait || (championDriver?.name ? getDriverPortrait(championDriver.name) : null);
 
   return (
     <div className="relative w-full select-none my-12 sm:my-16">
@@ -176,21 +173,27 @@ export default function SeasonCard({
                           borderColor: pal.borderSubtle
                         }}
                       >
-                        {top3Drivers[0].portrait ? (
+                        {championPortrait ? (
                           <img 
-                            src={top3Drivers[0].portrait} 
-                            alt={top3Drivers[0].name}
+                            src={championPortrait} 
+                            alt={championDriver?.name || 'World Champion'}
                             className="w-full h-full object-cover object-top"
                             loading="lazy"
-                            onError={(e) => { e.target.style.display = 'none'; }}
+                            referrerPolicy="no-referrer"
+                            onError={(e) => { 
+                              e.target.style.display = 'none'; 
+                              if (e.target.nextElementSibling) {
+                                e.target.nextElementSibling.style.display = 'flex';
+                              }
+                            }}
                           />
                         ) : null}
-                        <span 
-                          className="font-editorial font-bold text-2xl absolute opacity-30"
-                          style={{ color: pal.titleColor }}
+                        <div 
+                          className="w-full h-full flex items-center justify-center"
+                          style={{ display: championPortrait ? 'none' : 'flex' }}
                         >
-                          {getInitials(top3Drivers[0].name)}
-                        </span>
+                          <Trophy className="w-7 h-7 opacity-25" style={{ color: pal.titleColor }} />
+                        </div>
                       </div>
 
                       {/* Gold Laurel Badge */}
