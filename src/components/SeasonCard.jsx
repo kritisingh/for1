@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Car, ChevronDown, ChevronUp, Award, Sparkles, AlertCircle } from 'lucide-react';
+import { Trophy, Car, ChevronDown, ChevronUp, Award, AlertCircle, Plane } from 'lucide-react';
+import RealCarThumbnail from './RealCarThumbnail';
+import { SEASON_CARD_PALETTES } from '../data/themeColors';
 
-export default function SeasonCard({ season, globalViewMode }) {
-  const { year, era, heroCar, champDriver, champConstructor, drivers, constructors, constructorsApplicable } = season;
+export default function SeasonCard({ 
+  season, 
+  globalViewMode, 
+  seasonCardPalette = 'eucalyptus-butter',
+  onSelectPalette
+}) {
+  const { year, era, heroCar, drivers, constructors, constructorsApplicable } = season;
 
   const [activeTab, setActiveTab] = useState(globalViewMode);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isDriversExpanded, setIsDriversExpanded] = useState(false);
+  const [isConstructorsExpanded, setIsConstructorsExpanded] = useState(false);
 
   useEffect(() => {
     setActiveTab(globalViewMode);
   }, [globalViewMode]);
+
+  // Active color palette: Eucalyptus & Buttercream
+  const pal = SEASON_CARD_PALETTES[seasonCardPalette] || SEASON_CARD_PALETTES['eucalyptus-butter'];
 
   const driverList = drivers || [];
   const constructorList = constructors || [];
@@ -20,6 +31,8 @@ export default function SeasonCard({ season, globalViewMode }) {
   const top3Constructors = constructorList.slice(0, 3);
   const restConstructors = constructorList.slice(3, 10);
 
+  const championTeam = top3Constructors[0]?.name || top3Drivers[0]?.team || 'Grand Prix';
+
   const getInitials = name => {
     if (!name) return 'F1';
     const parts = name.split(' ');
@@ -28,471 +41,698 @@ export default function SeasonCard({ season, globalViewMode }) {
   };
 
   return (
-    <article 
-      id={`year-${year}`} 
-      className="scroll-mt-24 w-full max-w-4xl mx-auto my-10 bg-[#151A23] border border-[#232B39] rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:border-[#2F3A4D]"
-    >
+    <div className="relative w-full select-none my-12 sm:my-16">
       
-      {/* Card Header: Year, Era, and Tab Switcher */}
-      <div className="p-4 sm:p-5 border-b border-[#202735] flex flex-wrap items-center justify-between gap-4 bg-[#12161F]/60">
+      {/* =========================================================================
+          TOP INCOMING FLIGHT CONNECTOR (Vertical glideslope connecting downward)
+          ========================================================================= */}
+      <div className="flex flex-col items-center mb-3">
+        <div className="w-[1.5px] h-10 border-l-2 border-dashed border-emerald-700/35" />
+        <div className="p-1.5 rounded-full bg-emerald-800/10 border border-emerald-800/20 text-emerald-800 mt-1 shadow-2xs">
+          <Plane className="w-3.5 h-3.5 transform rotate-180" />
+        </div>
+        <div className="w-[1.5px] h-4 border-l-2 border-dashed border-emerald-700/35" />
+      </div>
+
+      {/* =========================================================================
+          FLIGHT GLIDESLOPE CARD (Eucalyptus & Buttercream Deck)
+          ========================================================================= */}
+      <article 
+        id={`year-${year}`} 
+        className="scroll-mt-24 w-full max-w-3xl xl:max-w-4xl mx-auto rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden transition-all duration-300 shadow-[0_20px_50px_-10px_rgba(10,35,18,0.22)]"
+        style={{
+          backgroundColor: pal.bg,
+          border: `1.5px solid ${pal.border}`
+        }}
+      >
         
-        {/* Year & Era */}
-        <div className="flex items-baseline gap-3.5">
-          <span className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            {year}
-          </span>
-          <div className="flex flex-col">
-            <span className="text-xs font-semibold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-rose-400" />
-              {era?.name || 'Grand Prix Era'}
-            </span>
-            <span className="text-xs text-slate-400 hidden sm:inline font-normal mt-0.5">
-              {era?.engine}
-            </span>
+        {/* Cockpit Horizon Header */}
+        <div 
+          className="p-6 sm:p-7 border-b backdrop-blur-md"
+          style={{
+            borderColor: pal.borderSubtle,
+            background: `linear-gradient(180deg, ${pal.bgCard} 0%, ${pal.bg} 100%)`
+          }}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            
+            {/* Year & Horizon Attitude Wings */}
+            <div className="flex items-center gap-4">
+              <span 
+                className="font-editorial text-4xl sm:text-5xl md:text-6xl font-normal tracking-tight leading-none drop-shadow-sm"
+                style={{ color: pal.titleColor }}
+              >
+                {year}
+              </span>
+              
+              <div className="h-10 w-[1.5px] opacity-25 hidden sm:block" style={{ backgroundColor: pal.titleColor }} />
+
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: pal.accentColor }} />
+                  <span 
+                    className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em]"
+                    style={{ color: pal.subtextColor }}
+                  >
+                    {era?.name || 'Grand Prix Season'}
+                  </span>
+                </div>
+                <span 
+                  className="text-xs font-normal mt-0.5"
+                  style={{ color: pal.bodyTextColor, opacity: 0.9 }}
+                >
+                  Engine Spec: <strong style={{ color: pal.titleColor }}>{era?.engine}</strong>
+                </span>
+              </div>
+            </div>
+
+            {/* Drivers vs Constructors Flight Selector */}
+            <div 
+              className="p-1 rounded-xl flex items-center text-xs font-medium border"
+              style={{
+                backgroundColor: pal.bgSubtle,
+                borderColor: pal.borderSubtle
+              }}
+            >
+              <button
+                onClick={() => setActiveTab('drivers')}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer font-semibold"
+                style={{
+                  backgroundColor: activeTab === 'drivers' ? pal.titleColor : 'transparent',
+                  color: activeTab === 'drivers' ? pal.bg : pal.bodyTextColor
+                }}
+              >
+                <Trophy className="w-3.5 h-3.5" />
+                <span>Drivers (P1–P10)</span>
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('constructors')}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer font-semibold"
+                style={{
+                  backgroundColor: activeTab === 'constructors' ? pal.titleColor : 'transparent',
+                  color: activeTab === 'constructors' ? pal.bg : pal.bodyTextColor
+                }}
+              >
+                <Car className="w-3.5 h-3.5" />
+                <span>Constructors (P1–P10)</span>
+              </button>
+            </div>
+
           </div>
         </div>
 
-        {/* Local Tab Selector */}
-        <div className="bg-[#10141C] p-1 rounded-xl border border-[#222A38] flex items-center text-xs font-medium">
-          <button
-            onClick={() => setActiveTab('drivers')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-              activeTab === 'drivers'
-                ? 'bg-rose-500 text-white shadow-sm font-semibold'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Trophy className="w-3.5 h-3.5" />
-            <span>Drivers</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveTab('constructors')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-              activeTab === 'constructors'
-                ? 'bg-rose-500 text-white shadow-sm font-semibold'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Car className="w-3.5 h-3.5" />
-            <span>Constructors</span>
-          </button>
-        </div>
-
-      </div>
-
-      {/* Content Body: DRIVERS TAB */}
-      {activeTab === 'drivers' && (
-        <div className="p-4 sm:p-6">
-          
-          {/* Top 3 Podium */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-4">
+        {/* =========================================================================
+            DRIVERS TAB: P1, P2, P3 + COLLAPSIBLE 4 TO 10 DRIVER STANDINGS
+            ========================================================================= */}
+        {activeTab === 'drivers' && (
+          <div className="p-6 sm:p-7">
             
-            {/* P1 Champion (Hero Card) */}
-            {top3Drivers[0] && (
-              <div className="md:col-span-3 bg-[#191F2B] border border-[#273142] rounded-2xl p-4 sm:p-5 relative overflow-hidden shadow-md">
-                
-                {/* Team livery accent stripe */}
+            {/* Step-Down Podium */}
+            <div className="flex flex-col gap-3.5 mb-5">
+              
+              {/* P1 Champion Apex */}
+              {top3Drivers[0] && (
                 <div 
-                  className="absolute left-0 top-0 bottom-0 w-1.5"
-                  style={{ backgroundColor: top3Drivers[0].teamColor || '#E11D48' }}
-                />
+                  className="rounded-2xl p-5 relative overflow-hidden border shadow-sm"
+                  style={{
+                    backgroundColor: pal.bgCard,
+                    borderColor: pal.border
+                  }}
+                >
+                  <div 
+                    className="absolute left-0 top-0 bottom-0 w-2.5"
+                    style={{ backgroundColor: top3Drivers[0].teamColor || '#FF8000' }}
+                  />
 
-                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                  
-                  {/* Driver Face / Portrait */}
-                  <div className="relative shrink-0">
-                    <div 
-                      className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-[#313C50] bg-[#12161E] flex items-center justify-center relative shadow-xs"
-                      style={{ boxShadow: `0 0 24px ${top3Drivers[0].teamColor}25` }}
-                    >
-                      {top3Drivers[0].portrait ? (
-                        <img 
-                          src={top3Drivers[0].portrait} 
-                          alt={top3Drivers[0].name}
-                          className="w-full h-full object-cover object-top"
-                          loading="lazy"
-                          onError={(e) => { e.target.style.display = 'none'; }}
-                        />
-                      ) : null}
-                      <span className="font-display font-bold text-xl text-slate-400 absolute">
-                        {getInitials(top3Drivers[0].name)}
-                      </span>
-                    </div>
-
-                    {/* Gold Champion Badge */}
-                    <div className="absolute -bottom-1.5 -right-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 font-display font-bold text-[10px] px-2 py-0.5 rounded-full shadow flex items-center gap-1">
-                      <Award className="w-3 h-3" />
-                      <span>P1</span>
-                    </div>
-                  </div>
-
-                  {/* Driver Details */}
-                  <div className="flex-1 text-center sm:text-left">
-                    <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400 mb-0.5">
-                      <span>World Champion</span>
-                      <span className="text-slate-600">•</span>
-                      <span>{top3Drivers[0].nationality}</span>
-                    </div>
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 pl-1">
                     
-                    <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
-                      {top3Drivers[0].name}
-                    </h3>
-                    
-                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
-                      <span 
-                        className="px-2.5 py-0.5 rounded-full text-xs font-medium border"
-                        style={{ 
-                          backgroundColor: `${top3Drivers[0].teamColor}20`,
-                          borderColor: `${top3Drivers[0].teamColor}50`,
-                          color: '#fff' 
+                    {/* Driver Portrait in Clean Frame */}
+                    <div className="relative shrink-0">
+                      <div 
+                        className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl overflow-hidden border flex items-center justify-center relative shadow-xs"
+                        style={{
+                          backgroundColor: pal.bgSubtle,
+                          borderColor: pal.borderSubtle
                         }}
                       >
-                        {top3Drivers[0].team}
-                      </span>
-                      <span className="text-xs text-slate-300 bg-[#12161F] border border-[#232B39] px-2.5 py-0.5 rounded-md">
-                        Car: <strong className="text-white font-semibold">{heroCar}</strong>
-                      </span>
-                    </div>
-                  </div>
+                        {top3Drivers[0].portrait ? (
+                          <img 
+                            src={top3Drivers[0].portrait} 
+                            alt={top3Drivers[0].name}
+                            className="w-full h-full object-cover object-top"
+                            loading="lazy"
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                        ) : null}
+                        <span 
+                          className="font-editorial font-bold text-2xl absolute opacity-30"
+                          style={{ color: pal.titleColor }}
+                        >
+                          {getInitials(top3Drivers[0].name)}
+                        </span>
+                      </div>
 
-                  {/* Stats: Points & Wins */}
-                  <div className="flex sm:flex-col items-center sm:items-end gap-3 sm:gap-0.5 bg-[#12161F]/80 sm:bg-transparent px-3.5 py-2 sm:p-0 rounded-xl border sm:border-0 border-[#222A38]">
-                    <div className="text-right">
-                      <div className="text-[10px] uppercase font-medium tracking-wider text-slate-400">Points</div>
-                      <div className="font-display text-xl sm:text-2xl font-bold text-white">
-                        {top3Drivers[0].points}
+                      {/* Gold Laurel Badge */}
+                      <div 
+                        className="absolute -bottom-1 -right-1 font-editorial font-bold text-[10px] px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1"
+                        style={{
+                          backgroundColor: pal.titleColor,
+                          color: pal.bg
+                        }}
+                      >
+                        <Award className="w-3 h-3" />
+                        <span>P1</span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xs font-semibold text-amber-400">
+
+                    {/* Driver Details */}
+                    <div className="flex-1 text-center sm:text-left">
+                      <div 
+                        className="inline-flex items-center gap-2 text-xs font-semibold mb-0.5"
+                        style={{ color: pal.subtextColor }}
+                      >
+                        <span>World Drivers' Champion</span>
+                        <span>•</span>
+                        <span>{top3Drivers[0].nationality}</span>
+                      </div>
+                      
+                      <h3 
+                        className="font-editorial text-2xl sm:text-3xl font-normal tracking-tight"
+                        style={{ color: pal.titleColor }}
+                      >
+                        {top3Drivers[0].name}
+                      </h3>
+                      
+                      <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
+                        <span 
+                          className="px-3 py-0.5 rounded-full text-xs font-semibold border"
+                          style={{ 
+                            backgroundColor: `${top3Drivers[0].teamColor}25`,
+                            borderColor: `${top3Drivers[0].teamColor}60`,
+                            color: pal.titleColor
+                          }}
+                        >
+                          {top3Drivers[0].team}
+                        </span>
+                        <span 
+                          className="text-xs px-3 py-0.5 rounded-full border"
+                          style={{
+                            backgroundColor: pal.bgSubtle,
+                            borderColor: pal.borderSubtle,
+                            color: pal.bodyTextColor
+                          }}
+                        >
+                          Chassis: <strong style={{ color: pal.titleColor }}>{heroCar}</strong>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Points & Wins */}
+                    <div 
+                      className="flex sm:flex-col items-center sm:items-end gap-3 sm:gap-0.5 px-4 py-2 sm:p-0 rounded-xl border sm:border-0"
+                      style={{
+                        backgroundColor: pal.bgSubtle,
+                        borderColor: pal.borderSubtle
+                      }}
+                    >
+                      <div className="text-right">
+                        <div 
+                          className="text-[10px] uppercase font-bold tracking-wider"
+                          style={{ color: pal.subtextColor }}
+                        >
+                          Points
+                        </div>
+                        <div 
+                          className="font-editorial text-2xl sm:text-3xl font-normal"
+                          style={{ color: pal.titleColor }}
+                        >
+                          {top3Drivers[0].points}
+                        </div>
+                      </div>
+                      <div 
+                        className="text-right text-xs font-bold"
+                        style={{ color: pal.accentColor }}
+                      >
                         {top3Drivers[0].wins} {top3Drivers[0].wins === 1 ? 'Win' : 'Wins'}
                       </div>
                     </div>
-                  </div>
 
+                  </div>
                 </div>
+              )}
+
+              {/* Step-Down: P2 & P3 Rows */}
+              <div 
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-3 sm:pl-6 border-l-2 border-dashed"
+                style={{ borderColor: pal.border }}
+              >
+                {top3Drivers.slice(1, 3).map((d, i) => (
+                  <div 
+                    key={d.name} 
+                    className="p-3.5 rounded-xl flex items-center justify-between gap-3 relative overflow-hidden border transition-all"
+                    style={{
+                      backgroundColor: pal.bgCard,
+                      borderColor: pal.borderSubtle
+                    }}
+                  >
+                    <div 
+                      className="absolute left-0 top-0 bottom-0 w-1.5"
+                      style={{ backgroundColor: d.teamColor || '#94A3B8' }}
+                    />
+                    <div className="flex items-center gap-3 pl-1.5">
+                      <span 
+                        className="text-xs font-bold w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border"
+                        style={{
+                          backgroundColor: pal.bgSubtle,
+                          borderColor: pal.borderSubtle,
+                          color: pal.titleColor
+                        }}
+                      >
+                        P{i + 2}
+                      </span>
+                      <div>
+                        <div 
+                          className="font-editorial font-bold text-base leading-tight"
+                          style={{ color: pal.titleColor }}
+                        >
+                          {d.name}
+                        </div>
+                        <div 
+                          className="text-xs font-medium mt-0.5"
+                          style={{ color: pal.bodyTextColor, opacity: 0.8 }}
+                        >
+                          {d.team}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <div 
+                        className="font-editorial font-bold text-sm"
+                        style={{ color: pal.titleColor }}
+                      >
+                        {d.points} pts
+                      </div>
+                      <div 
+                        className="text-[10px] font-medium"
+                        style={{ color: pal.subtextColor }}
+                      >
+                        {d.wins} {d.wins === 1 ? 'win' : 'wins'}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
 
-            {/* P2 Runner-Up */}
-            {top3Drivers[1] && (
-              <div className="bg-[#181E29] border border-[#263040] rounded-xl p-3.5 flex items-center justify-between gap-3 relative overflow-hidden">
-                <div 
-                  className="absolute left-0 top-0 bottom-0 w-1"
-                  style={{ backgroundColor: top3Drivers[1].teamColor || '#888' }}
-                />
-                <div className="flex items-center gap-2.5 pl-1.5">
-                  <span className="text-xs font-bold text-slate-300 bg-[#12161F] border border-[#232B39] w-6 h-6 rounded-md flex items-center justify-center shrink-0">
-                    P2
-                  </span>
-                  <div>
-                    <div className="font-display font-bold text-white text-sm leading-tight">
-                      {top3Drivers[1].name}
-                    </div>
-                    <div className="text-xs text-slate-400 font-normal mt-0.5">
-                      {top3Drivers[1].team}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="font-display font-bold text-xs text-slate-200">
-                    {top3Drivers[1].points} pts
-                  </div>
-                  <div className="text-[10px] text-slate-400">
-                    {top3Drivers[1].wins} {top3Drivers[1].wins === 1 ? 'win' : 'wins'}
-                  </div>
-                </div>
-              </div>
-            )}
+            </div>
 
-            {/* P3 Third Place */}
-            {top3Drivers[2] && (
-              <div className="bg-[#181E29] border border-[#263040] rounded-xl p-3.5 flex items-center justify-between gap-3 relative overflow-hidden">
-                <div 
-                  className="absolute left-0 top-0 bottom-0 w-1"
-                  style={{ backgroundColor: top3Drivers[2].teamColor || '#888' }}
-                />
-                <div className="flex items-center gap-2.5 pl-1.5">
-                  <span className="text-xs font-bold text-amber-400 bg-[#12161F] border border-[#232B39] w-6 h-6 rounded-md flex items-center justify-center shrink-0">
-                    P3
-                  </span>
-                  <div>
-                    <div className="font-display font-bold text-white text-sm leading-tight">
-                      {top3Drivers[2].name}
-                    </div>
-                    <div className="text-xs text-slate-400 font-normal mt-0.5">
-                      {top3Drivers[2].team}
-                    </div>
+            {/* ===================================================================
+                P4 TO P10 DRIVER STANDINGS (Hidden by default, user clicks to expand)
+                =================================================================== */}
+            {restDrivers.length > 0 && (
+              <div className="mt-5">
+                <button
+                  onClick={() => setIsDriversExpanded(!isDriversExpanded)}
+                  className="w-full flex items-center justify-between py-2.5 px-4 rounded-xl border text-xs font-semibold transition-all cursor-pointer"
+                  style={{
+                    backgroundColor: pal.bgCard,
+                    borderColor: pal.borderSubtle,
+                    color: pal.titleColor
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pal.accentColor }} />
+                    <span>Positions 4 – {driverList.length}</span>
                   </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="font-display font-bold text-xs text-slate-200">
-                    {top3Drivers[2].points} pts
+                  <div className="flex items-center gap-1.5 text-[11px]" style={{ color: pal.subtextColor }}>
+                    <span>{isDriversExpanded ? 'Hide Standings (P4 – P10)' : 'View Standings (P4 – P10)'}</span>
+                    {isDriversExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </div>
-                  <div className="text-[10px] text-slate-400">
-                    {top3Drivers[2].wins} {top3Drivers[2].wins === 1 ? 'win' : 'wins'}
+                </button>
+
+                {isDriversExpanded && (
+                  <div 
+                    className="mt-2 divide-y rounded-xl overflow-hidden border shadow-xs animate-in fade-in duration-200"
+                    style={{
+                      backgroundColor: pal.bgCard,
+                      borderColor: pal.borderSubtle
+                    }}
+                  >
+                    {restDrivers.map(d => (
+                      <div 
+                        key={d.pos} 
+                        className="p-3 sm:px-4 flex items-center justify-between text-xs transition-colors"
+                        style={{
+                          borderColor: pal.borderSubtle
+                        }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span 
+                            className="font-bold w-5"
+                            style={{ color: pal.subtextColor }}
+                          >
+                            {d.pos}.
+                          </span>
+                          <span 
+                            className="w-2.5 h-2.5 rounded-full shrink-0 shadow-2xs" 
+                            style={{ backgroundColor: d.teamColor || '#888' }} 
+                          />
+                          <span 
+                            className="font-semibold"
+                            style={{ color: pal.titleColor }}
+                          >
+                            {d.name}
+                          </span>
+                          <span 
+                            className="text-[11px] hidden sm:inline"
+                            style={{ color: pal.bodyTextColor, opacity: 0.75 }}
+                          >
+                            ({d.team})
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center gap-4">
+                          <span 
+                            className="text-[11px] hidden sm:inline"
+                            style={{ color: pal.subtextColor }}
+                          >
+                            {d.wins > 0 ? `${d.wins} wins` : '0 wins'}
+                          </span>
+                          <span 
+                            className="font-bold"
+                            style={{ color: pal.titleColor }}
+                          >
+                            {d.points} pts
+                          </span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
+                )}
               </div>
             )}
 
           </div>
+        )}
 
-          {/* Expandable Positions (P4 to P10) */}
-          {restDrivers.length > 0 && (
-            <div className="mt-3">
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-[#12161F] border border-[#222A38] text-xs text-slate-400 hover:text-white hover:border-[#2C3648] transition-all"
+        {/* =========================================================================
+            CONSTRUCTORS TAB: P1, P2, P3 + COLLAPSIBLE 4 TO 10 CONSTRUCTOR STANDINGS
+            ========================================================================= */}
+        {activeTab === 'constructors' && (
+          <div className="p-6 sm:p-7">
+            
+            {!constructorsApplicable ? (
+              <div 
+                className="p-6 rounded-2xl border flex items-start gap-3.5 text-left"
+                style={{
+                  backgroundColor: pal.bgCard,
+                  borderColor: pal.border
+                }}
               >
-                <span>{isExpanded ? 'Hide Full Standings' : `Show Standings (P4 – P${driverList.length})`}</span>
-                {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-              </button>
-
-              {isExpanded && (
-                <div className="mt-2.5 divide-y divide-[#202735] border border-[#222A38] rounded-xl overflow-hidden bg-[#12161F]/60">
-                  {restDrivers.map(d => (
-                    <div key={d.pos} className="p-2.5 sm:px-4 flex items-center justify-between text-xs hover:bg-[#181E29] transition-colors">
-                      <div className="flex items-center gap-3">
-                        <span className="font-semibold text-slate-500 w-5">
-                          {d.pos}.
-                        </span>
-                        <span 
-                          className="w-2 h-2 rounded-full shrink-0" 
-                          style={{ backgroundColor: d.teamColor || '#666' }}
-                        />
-                        <span className="font-medium text-slate-200">
-                          {d.name}
-                        </span>
-                        <span className="text-slate-500 text-[11px] hidden sm:inline">
-                          ({d.team})
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4 text-slate-300">
-                        <span className="text-slate-500 text-[11px] hidden sm:inline">
-                          {d.wins > 0 ? `${d.wins} wins` : '-'}
-                        </span>
-                        <span className="font-bold text-white">
-                          {d.points} pts
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: pal.accentColor }} />
+                <div>
+                  <h4 
+                    className="font-editorial font-bold text-base"
+                    style={{ color: pal.titleColor }}
+                  >
+                    No Constructors' Championship in {year}
+                  </h4>
+                  <p 
+                    className="mt-1 text-xs sm:text-sm leading-relaxed font-normal"
+                    style={{ color: pal.bodyTextColor }}
+                  >
+                    Prior to <strong>1958</strong>, Formula 1 was contested exclusively for the Drivers' World Championship. 
+                    The official <em>International Cup for F1 Manufacturers</em> was first awarded in 1958 to British constructor Vanwall.
+                  </p>
+                  <button
+                    onClick={() => setActiveTab('drivers')}
+                    className="mt-2.5 inline-flex items-center gap-1 text-xs font-semibold hover:underline cursor-pointer"
+                    style={{ color: pal.titleColor }}
+                  >
+                    View {year} Drivers' Championship (P1–P10) →
+                  </button>
                 </div>
-              )}
-            </div>
-          )}
-
-        </div>
-      )}
-
-      {/* Content Body: CONSTRUCTORS TAB */}
-      {activeTab === 'constructors' && (
-        <div className="p-4 sm:p-6">
-          
-          {!constructorsApplicable ? (
-            <div className="p-5 rounded-2xl bg-amber-950/20 border border-amber-500/30 flex items-start gap-3.5 text-left">
-              <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-display font-bold text-amber-400 text-base">
-                  No Constructors' Championship in {year}
-                </h4>
-                <p className="mt-1 text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                  Prior to <strong>1958</strong>, the FIA Formula 1 World Championship was awarded exclusively to drivers. 
-                  The official <em>International Cup for F1 Manufacturers</em> was first awarded in 1958 to British garage Vanwall.
-                </p>
-                <button
-                  onClick={() => setActiveTab('drivers')}
-                  className="mt-2.5 inline-flex items-center gap-1 text-xs font-semibold text-amber-400 hover:text-amber-300 underline"
-                >
-                  View {year} Drivers' Championship →
-                </button>
               </div>
-            </div>
-          ) : (
-            <>
-              {/* Top 3 Constructors Podium */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-4">
-                
-                {/* P1 Champion Constructor */}
-                {top3Constructors[0] && (
-                  <div className="md:col-span-3 bg-[#191F2B] border border-[#273142] rounded-2xl p-4 sm:p-5 relative overflow-hidden shadow-md">
-                    
+            ) : (
+              <>
+                {/* Step-Down Constructors Podium */}
+                <div className="flex flex-col gap-3.5 mb-5">
+                  
+                  {/* P1 Champion Constructor */}
+                  {top3Constructors[0] && (
                     <div 
-                      className="absolute left-0 top-0 bottom-0 w-1.5"
-                      style={{ backgroundColor: top3Constructors[0].teamColor || '#E11D48' }}
-                    />
-
-                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                      
+                      className="rounded-2xl p-5 relative overflow-hidden border shadow-sm"
+                      style={{
+                        backgroundColor: pal.bgCard,
+                        borderColor: pal.border
+                      }}
+                    >
                       <div 
-                        className="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl border border-[#313C50] bg-[#12161E] flex flex-col items-center justify-center relative shadow-xs shrink-0"
-                        style={{ boxShadow: `0 0 24px ${top3Constructors[0].teamColor}25` }}
-                      >
-                        <Car 
-                          className="w-8 h-8" 
-                          style={{ color: top3Constructors[0].teamColor || '#E11D48' }} 
-                        />
-                        <span className="text-[9px] font-bold text-slate-400 mt-1 uppercase">
-                          {heroCar.split(' ')[0]}
-                        </span>
-                        <div className="absolute -bottom-1.5 -right-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 font-display font-bold text-[10px] px-2 py-0.5 rounded-full shadow flex items-center gap-1">
-                          <Award className="w-3 h-3" />
-                          <span>P1</span>
-                        </div>
-                      </div>
+                        className="absolute left-0 top-0 bottom-0 w-2.5"
+                        style={{ backgroundColor: top3Constructors[0].teamColor || '#0284C7' }}
+                      />
 
-                      <div className="flex-1 text-center sm:text-left">
-                        <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400 mb-0.5">
-                          <span>Constructors' Champion</span>
-                          <span className="text-slate-600">•</span>
-                          <span>{top3Constructors[0].nationality}</span>
-                        </div>
+                      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 pl-1">
                         
-                        <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
-                          {top3Constructors[0].name}
-                        </h3>
-                        
-                        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
-                          <span className="text-xs text-slate-300 bg-[#12161F] border border-[#232B39] px-2.5 py-0.5 rounded-md">
-                            Iconic Chassis: <strong className="text-white font-semibold">{heroCar}</strong>
-                          </span>
+                        <div className="shrink-0 transform hover:scale-105 transition-transform">
+                          <RealCarThumbnail
+                            year={year}
+                            chassisName={heroCar}
+                            teamName={top3Constructors[0].name}
+                            size="sm"
+                            showLabel={false}
+                          />
                         </div>
-                      </div>
 
-                      <div className="flex sm:flex-col items-center sm:items-end gap-3 sm:gap-0.5 bg-[#12161F]/80 sm:bg-transparent px-3.5 py-2 sm:p-0 rounded-xl border sm:border-0 border-[#222A38]">
-                        <div className="text-right">
-                          <div className="text-[10px] uppercase font-medium tracking-wider text-slate-400">Points</div>
-                          <div className="font-display text-xl sm:text-2xl font-bold text-white">
-                            {top3Constructors[0].points}
+                        <div className="flex-1 text-center sm:text-left">
+                          <div 
+                            className="inline-flex items-center gap-2 text-xs font-semibold mb-0.5"
+                            style={{ color: pal.subtextColor }}
+                          >
+                            <span>Constructors' World Champion</span>
+                            <span>•</span>
+                            <span>{top3Constructors[0].nationality}</span>
+                          </div>
+                          
+                          <h3 
+                            className="font-editorial text-2xl sm:text-3xl font-normal tracking-tight"
+                            style={{ color: pal.titleColor }}
+                          >
+                            {top3Constructors[0].name}
+                          </h3>
+                          
+                          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
+                            <span 
+                              className="text-xs px-3 py-0.5 rounded-full border shadow-2xs"
+                              style={{
+                                backgroundColor: pal.bgSubtle,
+                                borderColor: pal.borderSubtle,
+                                color: pal.bodyTextColor
+                              }}
+                            >
+                              Winning Chassis: <strong style={{ color: pal.titleColor }}>{heroCar}</strong>
+                            </span>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-xs font-semibold text-amber-400">
+
+                        <div 
+                          className="flex sm:flex-col items-center sm:items-end gap-3 sm:gap-0.5 px-4 py-2 sm:p-0 rounded-xl border sm:border-0"
+                          style={{
+                            backgroundColor: pal.bgSubtle,
+                            borderColor: pal.borderSubtle
+                          }}
+                        >
+                          <div className="text-right">
+                            <div 
+                              className="text-[10px] uppercase font-bold tracking-wider"
+                              style={{ color: pal.subtextColor }}
+                            >
+                              Points
+                            </div>
+                            <div 
+                              className="font-editorial text-2xl sm:text-3xl font-normal"
+                              style={{ color: pal.titleColor }}
+                            >
+                              {top3Constructors[0].points}
+                            </div>
+                          </div>
+                          <div 
+                            className="text-xs font-bold text-right"
+                            style={{ color: pal.accentColor }}
+                          >
                             {top3Constructors[0].wins} {top3Constructors[0].wins === 1 ? 'Win' : 'Wins'}
                           </div>
                         </div>
-                      </div>
 
-                    </div>
-                  </div>
-                )}
-
-                {/* P2 Runner-Up Constructor */}
-                {top3Constructors[1] && (
-                  <div className="bg-[#181E29] border border-[#263040] rounded-xl p-3.5 flex items-center justify-between gap-3 relative overflow-hidden">
-                    <div 
-                      className="absolute left-0 top-0 bottom-0 w-1"
-                      style={{ backgroundColor: top3Constructors[1].teamColor || '#888' }}
-                    />
-                    <div className="flex items-center gap-2.5 pl-1.5">
-                      <span className="text-xs font-bold text-slate-300 bg-[#12161F] border border-[#232B39] w-6 h-6 rounded-md flex items-center justify-center shrink-0">
-                        P2
-                      </span>
-                      <div>
-                        <div className="font-display font-bold text-white text-sm leading-tight">
-                          {top3Constructors[1].name}
-                        </div>
-                        <div className="text-xs text-slate-400 font-normal mt-0.5">
-                          {top3Constructors[1].nationality}
-                        </div>
                       </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <div className="font-display font-bold text-xs text-slate-200">
-                        {top3Constructors[1].points} pts
-                      </div>
-                      <div className="text-[10px] text-slate-400">
-                        {top3Constructors[1].wins} {top3Constructors[1].wins === 1 ? 'win' : 'wins'}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* P3 Constructor */}
-                {top3Constructors[2] && (
-                  <div className="bg-[#181E29] border border-[#263040] rounded-xl p-3.5 flex items-center justify-between gap-3 relative overflow-hidden">
-                    <div 
-                      className="absolute left-0 top-0 bottom-0 w-1"
-                      style={{ backgroundColor: top3Constructors[2].teamColor || '#888' }}
-                    />
-                    <div className="flex items-center gap-2.5 pl-1.5">
-                      <span className="text-xs font-bold text-amber-400 bg-[#12161F] border border-[#232B39] w-6 h-6 rounded-md flex items-center justify-center shrink-0">
-                        P3
-                      </span>
-                      <div>
-                        <div className="font-display font-bold text-white text-sm leading-tight">
-                          {top3Constructors[2].name}
-                        </div>
-                        <div className="text-xs text-slate-400 font-normal mt-0.5">
-                          {top3Constructors[2].nationality}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <div className="font-display font-bold text-xs text-slate-200">
-                        {top3Constructors[2].points} pts
-                      </div>
-                      <div className="text-[10px] text-slate-400">
-                        {top3Constructors[2].wins} {top3Constructors[2].wins === 1 ? 'win' : 'wins'}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-
-              {/* Expandable Positions (P4 to P10) */}
-              {restConstructors.length > 0 && (
-                <div className="mt-3">
-                  <button
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-[#12161F] border border-[#222A38] text-xs text-slate-400 hover:text-white hover:border-[#2C3648] transition-all"
-                  >
-                    <span>{isExpanded ? 'Hide Constructor Standings' : `Show Constructors (P4 – P${constructorList.length})`}</span>
-                    {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                  </button>
-
-                  {isExpanded && (
-                    <div className="mt-2.5 divide-y divide-[#202735] border border-[#222A38] rounded-xl overflow-hidden bg-[#12161F]/60">
-                      {restConstructors.map(c => (
-                        <div key={c.pos} className="p-2.5 sm:px-4 flex items-center justify-between text-xs hover:bg-[#181E29] transition-colors">
-                          <div className="flex items-center gap-3">
-                            <span className="font-semibold text-slate-500 w-5">
-                              {c.pos}.
-                            </span>
-                            <span 
-                              className="w-2 h-2 rounded-full shrink-0" 
-                              style={{ backgroundColor: c.teamColor || '#666' }}
-                            />
-                            <span className="font-medium text-slate-200">
-                              {c.name}
-                            </span>
-                            <span className="text-slate-500 text-[11px] hidden sm:inline">
-                              ({c.nationality})
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-4 text-slate-300">
-                            <span className="text-slate-500 text-[11px] hidden sm:inline">
-                              {c.wins > 0 ? `${c.wins} wins` : '-'}
-                            </span>
-                            <span className="font-bold text-white">
-                              {c.points} pts
-                            </span>
-                          </div>
-                        </div>
-                      ))}
                     </div>
                   )}
+
+                  {/* P2 & P3 Constructors */}
+                  <div 
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-3 sm:pl-6 border-l-2 border-dashed"
+                    style={{ borderColor: pal.border }}
+                  >
+                    {top3Constructors.slice(1, 3).map((c, i) => (
+                      <div 
+                        key={c.name} 
+                        className="p-3.5 rounded-xl flex items-center justify-between gap-3 relative overflow-hidden border transition-all"
+                        style={{
+                          backgroundColor: pal.bgCard,
+                          borderColor: pal.borderSubtle
+                        }}
+                      >
+                        <div 
+                          className="absolute left-0 top-0 bottom-0 w-1.5"
+                          style={{ backgroundColor: c.teamColor || '#94A3B8' }}
+                        />
+                        <div className="flex items-center gap-3 pl-1.5">
+                          <span 
+                            className="text-xs font-bold w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border"
+                            style={{
+                              backgroundColor: pal.bgSubtle,
+                              borderColor: pal.borderSubtle,
+                              color: pal.titleColor
+                            }}
+                          >
+                            P{i + 2}
+                          </span>
+                          <div>
+                            <div 
+                              className="font-editorial font-bold text-base leading-tight"
+                              style={{ color: pal.titleColor }}
+                            >
+                              {c.name}
+                            </div>
+                            <div 
+                              className="text-xs font-medium mt-0.5"
+                              style={{ color: pal.bodyTextColor, opacity: 0.8 }}
+                            >
+                              {c.nationality}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <div 
+                            className="font-editorial font-bold text-sm"
+                            style={{ color: pal.titleColor }}
+                          >
+                            {c.points} pts
+                          </div>
+                          <div 
+                            className="text-[10px] font-medium"
+                            style={{ color: pal.subtextColor }}
+                          >
+                            {c.wins} {c.wins === 1 ? 'win' : 'wins'}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
                 </div>
-              )}
-            </>
-          )}
 
-        </div>
-      )}
+                {/* ===================================================================
+                    P4 TO P10 CONSTRUCTOR STANDINGS (Hidden by default, user clicks to expand)
+                    =================================================================== */}
+                {restConstructors.length > 0 && (
+                  <div className="mt-5">
+                    <button
+                      onClick={() => setIsConstructorsExpanded(!isConstructorsExpanded)}
+                      className="w-full flex items-center justify-between py-2.5 px-4 rounded-xl border text-xs font-semibold transition-all cursor-pointer"
+                      style={{
+                        backgroundColor: pal.bgCard,
+                        borderColor: pal.borderSubtle,
+                        color: pal.titleColor
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pal.accentColor }} />
+                        <span>Positions 4 – {constructorList.length}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[11px]" style={{ color: pal.subtextColor }}>
+                        <span>{isConstructorsExpanded ? 'Hide Standings (P4 – P10)' : 'View Standings (P4 – P10)'}</span>
+                        {isConstructorsExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                      </div>
+                    </button>
 
-    </article>
+                    {isConstructorsExpanded && (
+                      <div 
+                        className="mt-2 divide-y rounded-xl overflow-hidden border shadow-xs animate-in fade-in duration-200"
+                        style={{
+                          backgroundColor: pal.bgCard,
+                          borderColor: pal.borderSubtle
+                        }}
+                      >
+                        {restConstructors.map(c => (
+                          <div 
+                            key={c.pos} 
+                            className="p-3 sm:px-4 flex items-center justify-between text-xs transition-colors"
+                            style={{
+                              borderColor: pal.borderSubtle
+                            }}
+                          >
+                            <div className="flex items-center gap-3">
+                              <span 
+                                className="font-bold w-5"
+                                style={{ color: pal.subtextColor }}
+                              >
+                                {c.pos}.
+                              </span>
+                              <span 
+                                className="w-2.5 h-2.5 rounded-full shrink-0 shadow-2xs" 
+                                style={{ backgroundColor: c.teamColor || '#888' }} 
+                              />
+                              <span 
+                                className="font-semibold"
+                                style={{ color: pal.titleColor }}
+                              >
+                                {c.name}
+                              </span>
+                              <span 
+                                className="text-[11px] hidden sm:inline"
+                                style={{ color: pal.bodyTextColor, opacity: 0.75 }}
+                              >
+                                ({c.nationality})
+                              </span>
+                            </div>
+                            
+                            <div className="flex items-center gap-4">
+                              <span 
+                                className="text-[11px] hidden sm:inline"
+                                style={{ color: pal.subtextColor }}
+                              >
+                                {c.wins > 0 ? `${c.wins} wins` : '0 wins'}
+                              </span>
+                              <span 
+                                className="font-bold"
+                                style={{ color: pal.titleColor }}
+                              >
+                                {c.points} pts
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+
+          </div>
+        )}
+
+      </article>
+
+      {/* =========================================================================
+          BOTTOM OUTGOING FLIGHT CONNECTOR (Connecting downward into next year)
+          ========================================================================= */}
+      <div className="flex flex-col items-center mt-3">
+        <div className="w-[1.5px] h-10 border-l-2 border-dashed border-emerald-700/35" />
+        <div className="w-2 h-2 rounded-full bg-emerald-700/50 mt-1" />
+      </div>
+
+    </div>
   );
 }

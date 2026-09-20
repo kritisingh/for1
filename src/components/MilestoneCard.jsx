@@ -1,79 +1,144 @@
-import React from 'react';
-import { Radio, Cpu, ShieldCheck, Flame, Zap, MessageSquareQuote } from 'lucide-react';
+import React, { useState } from 'react';
+import { MessageSquareQuote, Radio, Wrench, Flag, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { SEASON_CARD_PALETTES } from '../data/themeColors';
 
-export default function MilestoneCard({ milestone }) {
-  const { type, badge, title, tagline, quote, speaker, description, stats } = milestone;
+/**
+ * Formula 1 Historic Milestone Card — Timeline Bookmark
+ * 
+ * Permanently locked design:
+ * - Sleek, low-profile horizontal ribbon strip (~75px) that sits between seasons
+ * - Interactive expandable drawer: click to unfold full story, quotes, and stats
+ * - Strict font consistency: font-editorial for quotes & titles, font-body for text
+ * - 100% Soft Sage palette matching SeasonCard and SkyLayerMarker
+ */
+
+export default function MilestoneCard({ milestone, palette = 'sage-black' }) {
+  const { afterYear, type, badge, title, quote, speaker, description, stats } = milestone;
+
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Soft Sage palette tokens
+  const pal = SEASON_CARD_PALETTES[palette] || SEASON_CARD_PALETTES['sage-black'];
+
+  // Clean raw emojis from badge text (e.g. "⚠️ RACE CONTROL CONTROVERSY" -> "RACE CONTROL CONTROVERSY")
+  const cleanBadge = (badge || '').replace(/^[^\w\s]+/, '').trim();
+
+  // Select appropriate motorsport icon
+  const renderIcon = () => {
+    switch (type) {
+      case 'radio':
+        return <Radio className="w-4 h-4" style={{ color: pal.accentColor }} />;
+      case 'tech':
+        return <Wrench className="w-4 h-4" style={{ color: pal.accentColor }} />;
+      case 'dossier':
+        return <Flag className="w-4 h-4" style={{ color: pal.accentColor }} />;
+      default:
+        return <AlertCircle className="w-4 h-4" style={{ color: pal.accentColor }} />;
+    }
+  };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto my-12 px-2 sm:px-0">
-      <div className="relative rounded-2xl bg-[#161C26] border border-[#263142] p-6 sm:p-8 shadow-lg overflow-hidden">
-        
-        {/* Subtle decorative glow */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/5 rounded-full blur-3xl pointer-events-none" />
+    <aside 
+      id={afterYear ? `milestone-${afterYear}` : undefined}
+      className="w-full max-w-3xl xl:max-w-4xl mx-auto my-6 sm:my-8 select-none"
+    >
+      <div 
+        className="w-full rounded-2xl border shadow-[0_8px_24px_-6px_rgba(10,35,18,0.12)] transition-all duration-300 overflow-hidden"
+        style={{
+          backgroundColor: pal.bg,
+          borderColor: pal.border
+        }}
+      >
+        {/* Main Ribbon Strip (Clickable to toggle) */}
+        <div 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="p-4 sm:p-4.5 flex items-center justify-between gap-4 cursor-pointer hover:opacity-95 transition-all"
+        >
+          <div className="flex items-center gap-3.5 flex-1 min-w-0">
+            {/* Motorsport Icon Badge */}
+            <div 
+              className="w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs"
+              style={{ backgroundColor: pal.bgCard, borderColor: pal.borderSubtle }}
+            >
+              {renderIcon()}
+            </div>
 
-        {/* Top Header Row: Badge & Radio Indicator */}
-        <div className="flex items-center justify-between gap-4 mb-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-[#1F2633] border border-[#2D384B] text-rose-300">
-            <MessageSquareQuote className="w-3.5 h-3.5 text-rose-400" />
-            <span>{badge}</span>
+            {/* Teaser Metadata & Headline */}
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-wider" style={{ color: pal.subtextColor }}>
+                <span>{afterYear} Historic Flashpoint</span>
+                <span className="opacity-40">•</span>
+                <span>{cleanBadge}</span>
+              </div>
+              
+              <div className="font-editorial text-sm sm:text-base font-normal text-black truncate mt-0.5">
+                {quote ? (
+                  <span>“{quote}” — <span className="text-xs font-normal opacity-75">{title}</span></span>
+                ) : (
+                  <span>{title}</span>
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* Pit Radio Waveform */}
-          {type === 'radio' && (
-            <div className="flex items-center gap-1">
-              <span className="w-1 h-3.5 bg-rose-500 rounded-full animate-pulse" />
-              <span className="w-1 h-5 bg-rose-500 rounded-full animate-pulse delay-75" />
-              <span className="w-1 h-2.5 bg-rose-500 rounded-full animate-pulse delay-150" />
-              <span className="w-1 h-6 bg-rose-500 rounded-full animate-pulse delay-100" />
-              <span className="w-1 h-3 bg-rose-500 rounded-full animate-pulse delay-200" />
-              <span className="text-[11px] font-medium text-rose-400 ml-1.5">
-                Team Radio
-              </span>
-            </div>
-          )}
+          {/* Expand / Collapse Action Button */}
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsExpanded(!isExpanded);
+            }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold shrink-0 transition-all shadow-2xs cursor-pointer hover:scale-102"
+            style={{
+              backgroundColor: pal.bgCard,
+              borderColor: pal.borderSubtle,
+              color: pal.titleColor
+            }}
+          >
+            <span>{isExpanded ? 'Close' : 'Read Story'}</span>
+            {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
         </div>
 
-        {/* Title & Tagline */}
-        <h3 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mt-1">
-          {title}
-        </h3>
-        
-        <div className="text-xs font-medium text-slate-400 uppercase tracking-wider mt-1">
-          {tagline}
-        </div>
-
-        {/* Quote Box */}
-        {quote && (
-          <div className="my-5 p-4 sm:p-5 rounded-2xl bg-[#111620] border-l-4 border-rose-500 border-y border-r border-[#222B3B]">
-            <p className="font-display text-base sm:text-lg italic font-semibold text-slate-100 leading-snug">
-              {quote}
+        {/* Expanded Drawer Details */}
+        {isExpanded && (
+          <div 
+            className="px-5 pb-5 pt-3 border-t transition-all duration-300"
+            style={{ 
+              borderColor: pal.borderSubtle, 
+              backgroundColor: pal.bgCard 
+            }}
+          >
+            {quote && speaker && (
+              <div className="mb-2 text-xs font-semibold italic text-black" style={{ color: pal.subtextColor }}>
+                Quote source: {speaker}
+              </div>
+            )}
+            
+            <p className="text-xs sm:text-sm font-normal leading-relaxed max-w-3xl" style={{ color: pal.bodyTextColor }}>
+              {description}
             </p>
-            {speaker && (
-              <div className="text-xs text-slate-400 font-medium mt-2 text-right">
-                — {speaker}
+
+            {stats && stats.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3.5 pt-3 border-t" style={{ borderColor: pal.borderSubtle }}>
+                {stats.map((s, idx) => (
+                  <span 
+                    key={idx} 
+                    className="text-xs px-2.5 py-1 rounded-lg border font-medium shadow-2xs"
+                    style={{ 
+                      backgroundColor: pal.bgSubtle, 
+                      borderColor: pal.borderSubtle, 
+                      color: pal.titleColor 
+                    }}
+                  >
+                    <span style={{ color: pal.subtextColor }}>{s.label}: </span>
+                    <strong>{s.value}</strong>
+                  </span>
+                ))}
               </div>
             )}
           </div>
         )}
-
-        {/* Description */}
-        <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal mt-2">
-          {description}
-        </p>
-
-        {/* Stats Strip */}
-        {stats && stats.length > 0 && (
-          <div className="flex flex-wrap gap-2.5 mt-5 pt-4 border-t border-[#222A38]">
-            {stats.map((s, idx) => (
-              <div key={idx} className="bg-[#111620] border border-[#252E3E] px-3.5 py-1.5 rounded-xl flex items-center gap-2">
-                <span className="text-xs text-slate-400 font-medium">{s.label}:</span>
-                <span className="text-xs font-bold text-white">{s.value}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
       </div>
-    </div>
+    </aside>
   );
 }

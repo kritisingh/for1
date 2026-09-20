@@ -1,19 +1,113 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
-import HeroSurface from './components/HeroSurface';
+import DaylightClouds from './components/DaylightClouds';
 import DecadeElevator from './components/DecadeElevator';
 import SeasonCard from './components/SeasonCard';
 import MilestoneCard from './components/MilestoneCard';
+import SkyLayerMarker from './components/SkyLayerMarker';
+import LandingSection from './components/LandingSection';
 import BedrockFooter from './components/BedrockFooter';
+import BackgroundRealCars from './components/BackgroundRealCars';
+import Lenis from 'lenis';
 import f1Data from './data/f1Data.json';
+import { LIGHT_THEMES } from './data/themeColors';
+
+const ERA_CHAPTERS = {
+  2025: {
+    year: 2025,
+    name: 'The Ground Effect Aero Era',
+    subName: 'Chapter IX • 2022 – Present',
+    description: 'Sculpted venturi tunnels underneath the floor generate massive downforce, enabling close wheel-to-wheel duels at 220 mph.'
+  },
+  2021: {
+    year: 2021,
+    name: 'The Turbo-Hybrid Revolution',
+    subName: 'Chapter VIII • 2014 – 2021',
+    description: '1.6L turbocharged V6 engines paired with complex 120kW electric motor-generators. The most thermally efficient racing engines ever built.'
+  },
+  2013: {
+    year: 2013,
+    name: 'The Screaming V8 Era',
+    subName: 'Chapter VII • 2006 – 2013',
+    description: '2.4L naturally aspirated V8 engines singing at 18,000 RPM, exhaust blown diffusers, and Red Bull with Sebastian Vettel capturing 4 consecutive world titles.'
+  },
+  2005: {
+    year: 2005,
+    name: 'The Screaming V10 Golden Apex',
+    subName: 'Chapter VI • 1995 – 2005',
+    description: '3.0L naturally aspirated V10 powerhouses screaming up to 19,000+ RPM. Schumacher and Ferrari set benchmarks of relentless dominance.'
+  },
+  1994: {
+    year: 1994,
+    name: 'The 3.5L Atmospheric Era',
+    subName: 'Chapter V • 1989 – 1994',
+    description: 'High-revving 3.5L atmospheric V10 and V12 engines, active suspension wizardry, and the legendary clash of titans: Senna, Prost, Mansell, and young Schumacher.'
+  },
+  1988: {
+    year: 1988,
+    name: 'The 1,400 HP Turbo Monsters',
+    subName: 'Chapter IV • 1977 – 1988',
+    description: 'Qualifying boost dialled up to 5.5 bar producing flame-spitting power slides and legendary rivalries between Senna, Prost, and Mansell.'
+  },
+  1976: {
+    year: 1976,
+    name: 'Airboxes, Wings & Garage Innovators',
+    subName: 'Chapter III • 1966 – 1976',
+    description: 'Towering periscope airboxes, monstrous rear wings, the iconic Cosworth DFV V8, and the visceral Hunt vs Lauda duel.'
+  },
+  1965: {
+    year: 1965,
+    name: 'The 1.5L Rear-Engine Revolution',
+    subName: 'Chapter II • 1961 – 1965',
+    description: 'Lightweight monocoque engineering, rear-mounted compact engines, and the supreme mastery of Jim Clark and Lotus.'
+  },
+  1958: {
+    year: 1958,
+    name: 'The Silverstone Genesis',
+    subName: 'Chapter I • 1950 – 1960',
+    description: 'Front-engine cigar-shaped torpedoes with wire wheels, leather helmets, and drum brakes racing on post-war British airfields.'
+  }
+};
 
 export default function App() {
-  const [globalViewMode, setGlobalViewMode] = useState('drivers');
-  const [currentYear, setCurrentYear] = useState(2025);
-  const [searchQuery, setSearchQuery] = useState('');
-
   const seasons = f1Data.seasons || [];
   const milestones = f1Data.milestones || [];
+  const latestYear = seasons[0]?.year || 2025;
+
+  const [globalViewMode, setGlobalViewMode] = useState('drivers');
+  const [currentYear, setCurrentYear] = useState(latestYear);
+  const [seasonCardStyle, setSeasonCardStyle] = useState('glideslope');
+  const [seasonCardPalette, setSeasonCardPalette] = useState('sage-black');
+  // Permanently set to Solar Mimosa as requested by the user
+  const [activeTheme, setActiveTheme] = useState(
+    LIGHT_THEMES.find(t => t.id === 'mimosa') || LIGHT_THEMES[2]
+  );
+
+  // Permanently locked in: Inertial Air Glide (Aerodynamic smooth inertial scrolling)
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.25,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.05,
+      touchMultiplier: 1.4,
+    });
+
+    let rafId;
+    function raf(time) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, []);
 
   // Map milestones by afterYear for O(1) lookup
   const milestonesByYear = useMemo(() => {
@@ -24,7 +118,7 @@ export default function App() {
     return map;
   }, [milestones]);
 
-  // Track active year depth with IntersectionObserver
+  // Track active year with IntersectionObserver
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
@@ -48,17 +142,18 @@ export default function App() {
     yearElements.forEach(el => observer.observe(el));
 
     return () => observer.disconnect();
-  }, [seasons, searchQuery]);
+  }, [seasons]);
 
   // Current era description based on active year
   const currentEra = useMemo(() => {
     const s = seasons.find(item => item.year === currentYear);
-    return s?.era?.name || 'Modern Era';
+    return s?.era?.name || 'Grand Prix Era';
   }, [currentYear, seasons]);
 
   // Smooth scroll helper
   const handleJumpToYear = targetYear => {
-    if (targetYear === 2025 && window.scrollY > 0) {
+    const latestYear = seasons[0]?.year;
+    if (targetYear === latestYear && window.scrollY > 0) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -68,108 +163,111 @@ export default function App() {
     }
   };
 
-  // Filter seasons based on search query
-  const filteredSeasons = useMemo(() => {
-    if (!searchQuery.trim()) return seasons;
-    const q = searchQuery.toLowerCase().trim();
-
-    return seasons.filter(s => {
-      if (s.year.toString().includes(q)) return true;
-      if (s.era?.name?.toLowerCase().includes(q)) return true;
-      const matchesDriver = s.drivers?.some(d => 
-        d.name?.toLowerCase().includes(q) || 
-        d.team?.toLowerCase().includes(q)
-      );
-      if (matchesDriver) return true;
-      const matchesConstructor = s.constructors?.some(c => 
-        c.name?.toLowerCase().includes(q)
-      );
-      if (matchesConstructor) return true;
-      return false;
-    });
-  }, [seasons, searchQuery]);
+  const filteredSeasons = seasons;
 
   return (
-    <div className="min-h-screen bg-[#101319] text-[#F1F5F9] relative selection:bg-rose-500 selection:text-white">
-      
+    <div 
+      className="min-h-screen text-stone-900 relative selection:bg-rose-100 selection:text-rose-900 font-body overflow-x-hidden transition-colors duration-500"
+      style={{ backgroundColor: activeTheme.bg }}
+    >
       {/* Top Sticky Header */}
       <Header
-        currentYear={currentYear}
-        currentEra={currentEra}
         viewMode={globalViewMode}
         setViewMode={setGlobalViewMode}
-        onJumpToYear={handleJumpToYear}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
+        onJumpToTop={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       />
 
-      {/* Surface Hero (2025 Entry) */}
-      <HeroSurface
-        onStartDive={() => handleJumpToYear(2025)}
-        onJumpToYear={handleJumpToYear}
-      />
+      {/* Daylight Atmospheric Sky Background with Warm Solar Glow */}
+      <div className="absolute top-0 left-0 right-0 h-[450px] pointer-events-none overflow-hidden z-0">
+        <DaylightClouds />
+        <div 
+          className="absolute -top-32 left-1/2 -translate-x-1/2 w-[40rem] h-[24rem] rounded-full opacity-40 blur-3xl pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(254, 240, 138, 0.6) 0%, rgba(251, 191, 36, 0.25) 60%, transparent 100%)'
+          }}
+        />
+      </div>
 
-      {/* Floating Decade Elevator */}
+      {/* Decade Side Scrubber */}
       <DecadeElevator
         currentYear={currentYear}
         onJumpToYear={handleJumpToYear}
       />
 
-      {/* Search status notification */}
-      {searchQuery.trim() && (
-        <div className="max-w-4xl mx-auto px-4 mt-6">
-          <div className="p-3 px-4 rounded-xl border border-[#27303E] bg-[#161B24] flex items-center justify-between text-xs">
-            <span className="text-slate-300">
-              Showing <strong className="text-rose-400 font-bold">{filteredSeasons.length}</strong> seasons matching "{searchQuery}"
+      {/* Main Continuous Descent Stream */}
+      <main className="px-4 pt-4 sm:pt-6 pb-12 max-w-5xl mx-auto relative z-10">
+
+        {/* World Champion Archive */}
+        <div className="pt-2 sm:pt-4 pb-4 text-center select-none">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-900/6 border border-emerald-900/12 shadow-2xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-700 animate-pulse" />
+            <span className="tracking-[0.2em] uppercase text-[10px] sm:text-[11px] font-bold text-emerald-950">
+              World Champion Archive
             </span>
-            <button
-              onClick={() => setSearchQuery('')}
-              className="text-slate-400 hover:text-white underline"
-            >
-              Clear search
-            </button>
           </div>
         </div>
-      )}
 
-      {/* Main Continuous Descent Stream */}
-      <main className="px-4 py-8 max-w-5xl mx-auto">
         {filteredSeasons.map(season => {
           const milestone = milestonesByYear[season.year];
+          const eraChapter = ERA_CHAPTERS[season.year];
 
           return (
             <React.Fragment key={season.year}>
-              <SeasonCard
-                season={season}
-                globalViewMode={globalViewMode}
-              />
-
-              {/* Dramatic story milestone interludes */}
-              {!searchQuery && milestone && (
-                <MilestoneCard milestone={milestone} />
+              
+              {/* Era Chapter Divider with Smooth Downforce Cushion Landing */}
+              {eraChapter && (
+                <LandingSection 
+                  effect="ground-cushion" 
+                  delay={0}
+                  className="snap-section"
+                >
+                  <SkyLayerMarker 
+                    layer={eraChapter} 
+                    palette={seasonCardPalette}
+                  />
+                </LandingSection>
               )}
+
+              {/* Season Standings Card with Floating Real Car in Sky Margin */}
+              <div className="relative max-w-3xl xl:max-w-4xl mx-auto">
+                <BackgroundRealCars year={season.year} />
+                <LandingSection 
+                  effect="ground-cushion" 
+                  delay={80}
+                  className="snap-section"
+                >
+                  <SeasonCard
+                    season={season}
+                    globalViewMode={globalViewMode}
+                    seasonCardStyle={seasonCardStyle}
+                    onSelectStyle={setSeasonCardStyle}
+                    seasonCardPalette={seasonCardPalette}
+                    onSelectPalette={setSeasonCardPalette}
+                  />
+                </LandingSection>
+              </div>
+
+              {/* Story milestone lore with Smooth Downforce Cushion Landing */}
+              {milestone && (
+                <LandingSection 
+                  effect="ground-cushion" 
+                  delay={120}
+                  className="snap-section"
+                >
+                  <MilestoneCard 
+                    milestone={milestone} 
+                    palette={seasonCardPalette}
+                  />
+                </LandingSection>
+              )}
+
             </React.Fragment>
           );
         })}
-
-        {filteredSeasons.length === 0 && (
-          <div className="text-center py-20 rounded-2xl border border-[#222A38] bg-[#161B24]/40 my-12">
-            <div className="font-display text-xl font-bold text-slate-200">No Seasons Found</div>
-            <p className="text-xs text-slate-400 mt-2">
-              No results matched your search "{searchQuery}". Try searching "Schumacher", "Ferrari", "1994", or "Senna".
-            </p>
-            <button
-              onClick={() => setSearchQuery('')}
-              className="mt-4 px-4 py-2 rounded-xl bg-[#202735] hover:bg-[#2A3345] text-xs text-white font-medium transition-colors"
-            >
-              Reset Search
-            </button>
-          </div>
-        )}
       </main>
 
-      {/* Bedrock Footer (1950 Silverstone) */}
-      <BedrockFooter onReturnToSurface={() => handleJumpToYear(2025)} />
+      {/* Ground Touchdown at Silverstone Airfield (1950) */}
+      <BedrockFooter onReturnToSurface={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
 
     </div>
   );

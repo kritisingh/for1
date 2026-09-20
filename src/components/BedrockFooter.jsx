@@ -1,46 +1,57 @@
 import React from 'react';
-import { Rocket, Flag } from 'lucide-react';
+import { ArrowUp, Flag } from 'lucide-react';
+import RealCarThumbnail from './RealCarThumbnail';
 
 export default function BedrockFooter({ onReturnToSurface }) {
   return (
-    <footer className="relative py-20 px-4 text-center border-t border-[#222A36] bg-[#101319] overflow-hidden">
+    <footer className="relative py-24 px-4 text-center border-t border-emerald-900/12 bg-white/75 backdrop-blur-md z-10 select-none">
       
-      {/* Background radial glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-amber-950/15 via-[#101319] to-[#101319] -z-10" />
-
-      {/* Bedrock Badge */}
-      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-950/30 border border-amber-600/40 text-amber-300 text-xs font-medium mb-6">
-        <Flag className="w-3.5 h-3.5 text-amber-400" />
-        <span>Maximum Depth Reached: 1950 (The Bedrock)</span>
+      {/* 1950 Genesis Real Car Thumbnail */}
+      <div className="mb-6 flex justify-center">
+        <RealCarThumbnail
+          year={1950}
+          chassisName="Alfa Romeo 158 Alfetta"
+          teamName="Alfa Romeo"
+          size="md"
+          showLabel={true}
+        />
       </div>
 
-      <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
-        You Have Reached <span className="text-amber-400">Time-Zero</span>
+      {/* 1950 Silverstone Badge */}
+      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-900/5 border border-emerald-900/12 text-emerald-900 text-xs font-semibold mb-4 shadow-2xs">
+        <Flag className="w-3.5 h-3.5 text-emerald-700" />
+        <span>13 MAY 1950 • SILVERSTONE • THE FIRST GRAND PRIX</span>
+      </div>
+
+      {/* Title in Editorial Serif */}
+      <h2 className="font-editorial text-4xl sm:text-5xl font-normal tracking-tight text-emerald-950">
+        You Have Reached <span className="italic text-emerald-800">The Genesis</span>
       </h2>
 
-      <p className="mt-4 text-slate-300 max-w-xl mx-auto text-sm sm:text-base leading-relaxed font-normal">
-        You just descended through 76 seasons of Formula 1 history—from modern ground-effect hybrids back to Giuseppe Farina winning on an RAF airfield in 1950.
+      <p className="mt-4 text-[#384F3D] max-w-xl mx-auto text-sm sm:text-base leading-relaxed font-normal">
+        You've explored the complete tapestry of Grand Prix history—drifting back through seven decades to Giuseppe Farina winning in a supercharged straight-8 Alfetta around an old British airfield.
       </p>
 
-      {/* Return to Surface Action */}
-      <div className="mt-10">
+      {/* Return to Top CTA */}
+      <div className="mt-8">
         <button
           onClick={onReturnToSurface}
-          className="group inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 text-white font-display font-bold text-sm tracking-wide shadow-lg shadow-rose-600/25 hover:scale-105 transition-all"
+          className="group inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-stone-900 hover:bg-stone-950 text-white font-medium text-sm tracking-wide shadow-md hover:scale-105 transition-all cursor-pointer"
         >
-          <Rocket className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
-          <span>Ascend to Surface (2025)</span>
+          <span>Return to Top</span>
+          <ArrowUp className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
         </button>
       </div>
 
-      <div className="mt-16 pt-8 border-t border-[#1C222E] text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-4xl mx-auto">
+      {/* Footer Archive Credits */}
+      <div className="mt-16 pt-8 border-t border-amber-900/10 text-xs text-amber-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-4xl mx-auto">
         <div className="flex items-center gap-2">
-          <span>The F1 Descent</span>
+          <span className="font-semibold text-stone-900">the Formula1</span>
           <span>•</span>
-          <span>Designed for curious racing geeks of all backgrounds</span>
+          <span>Grand Prix Archive</span>
         </div>
-        <div>
-          76 Grand Prix seasons (1950–2025)
+        <div className="text-amber-900/70 font-medium">
+          1950 – Present
         </div>
       </div>
 
