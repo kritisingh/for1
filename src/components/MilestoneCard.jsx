@@ -12,13 +12,13 @@ import { SEASON_CARD_PALETTES } from '../data/themeColors';
  * - 100% Soft Sage palette matching SeasonCard and SkyLayerMarker
  */
 
-export default function MilestoneCard({ milestone, palette = 'sage-black' }) {
+export default function MilestoneCard({ milestone, palette = 'oxford-midnight-bg' }) {
   const { afterYear, type, badge, title, quote, speaker, description, stats } = milestone;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Soft Sage palette tokens
-  const pal = SEASON_CARD_PALETTES[palette] || SEASON_CARD_PALETTES['sage-black'];
+  // Active palette tokens
+  const pal = SEASON_CARD_PALETTES[palette] || SEASON_CARD_PALETTES['oxford-midnight-bg'];
 
   // Clean raw emojis from badge text (e.g. "⚠️ RACE CONTROL CONTROVERSY" -> "RACE CONTROL CONTROVERSY")
   const cleanBadge = (badge || '').replace(/^[^\w\s]+/, '').trim();
@@ -43,7 +43,7 @@ export default function MilestoneCard({ milestone, palette = 'sage-black' }) {
       className="w-full max-w-3xl xl:max-w-4xl mx-auto my-6 sm:my-8 select-none"
     >
       <div 
-        className="w-full rounded-2xl border shadow-[0_8px_24px_-6px_rgba(10,35,18,0.12)] transition-all duration-300 overflow-hidden"
+        className="w-full rounded-2xl border shadow-[0_8px_24px_-6px_rgba(30,58,138,0.08),0_2px_6px_rgba(0,0,0,0.02)] transition-all duration-300 overflow-hidden"
         style={{
           backgroundColor: pal.bg,
           borderColor: pal.border
@@ -71,9 +71,9 @@ export default function MilestoneCard({ milestone, palette = 'sage-black' }) {
                 <span>{cleanBadge}</span>
               </div>
               
-              <div className="font-editorial text-sm sm:text-base font-normal text-black truncate mt-0.5">
+              <div className="font-editorial text-sm sm:text-base font-normal truncate mt-0.5" style={{ color: pal.titleColor }}>
                 {quote ? (
-                  <span>“{quote}” — <span className="text-xs font-normal opacity-75">{title}</span></span>
+                  <span>“{quote}” — <span className="text-xs font-normal opacity-85" style={{ color: pal.subtextColor }}>{title}</span></span>
                 ) : (
                   <span>{title}</span>
                 )}
@@ -109,7 +109,7 @@ export default function MilestoneCard({ milestone, palette = 'sage-black' }) {
             }}
           >
             {quote && speaker && (
-              <div className="mb-2 text-xs font-semibold italic text-black" style={{ color: pal.subtextColor }}>
+              <div className="mb-2 text-xs font-semibold italic" style={{ color: pal.subtextColor }}>
                 Quote source: {speaker}
               </div>
             )}

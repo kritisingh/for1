@@ -10,7 +10,7 @@ import BedrockFooter from './components/BedrockFooter';
 import BackgroundRealCars from './components/BackgroundRealCars';
 import Lenis from 'lenis';
 import f1Data from './data/f1Data.json';
-import { LIGHT_THEMES } from './data/themeColors';
+import { SEASON_CARD_PALETTES } from './data/themeColors';
 
 const ERA_CHAPTERS = {
   2025: {
@@ -77,11 +77,10 @@ export default function App() {
   const [globalViewMode, setGlobalViewMode] = useState('drivers');
   const [currentYear, setCurrentYear] = useState(latestYear);
   const [seasonCardStyle, setSeasonCardStyle] = useState('glideslope');
-  const [seasonCardPalette, setSeasonCardPalette] = useState('sage-black');
-  // Permanently set to Solar Mimosa as requested by the user
-  const [activeTheme, setActiveTheme] = useState(
-    LIGHT_THEMES.find(t => t.id === 'mimosa') || LIGHT_THEMES[2]
-  );
+  // Permanently locked in: Oxford Midnight Canvas (User-Selected Favorite)
+  const [seasonCardPalette, setSeasonCardPalette] = useState('oxford-midnight-bg');
+
+  const activePal = SEASON_CARD_PALETTES[seasonCardPalette] || SEASON_CARD_PALETTES['oxford-midnight-bg'];
 
   // Permanently locked in: Inertial Air Glide (Aerodynamic smooth inertial scrolling)
   useEffect(() => {
@@ -167,23 +166,29 @@ export default function App() {
 
   return (
     <div 
-      className="min-h-screen text-stone-900 relative selection:bg-rose-100 selection:text-rose-900 font-body overflow-x-hidden transition-colors duration-500"
-      style={{ backgroundColor: activeTheme.bg }}
+      className="min-h-screen relative selection:bg-blue-100 selection:text-blue-900 font-body overflow-x-hidden transition-colors duration-500"
+      style={{ 
+        backgroundColor: activePal.pageBg || '#FFFFFF',
+        color: activePal.bodyTextColor || '#1E40AF'
+      }}
     >
-      {/* Top Sticky Header */}
+      {/* Top Sticky Header with Theme Palette Switcher */}
       <Header
         viewMode={globalViewMode}
         setViewMode={setGlobalViewMode}
         onJumpToTop={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        palette={activePal}
+        currentPaletteId={seasonCardPalette}
+        onSelectPalette={setSeasonCardPalette}
       />
 
-      {/* Daylight Atmospheric Sky Background with Warm Solar Glow */}
+      {/* Daylight Atmospheric Sky Background with Royal Blue Atmospheric Glow */}
       <div className="absolute top-0 left-0 right-0 h-[450px] pointer-events-none overflow-hidden z-0">
         <DaylightClouds />
         <div 
-          className="absolute -top-32 left-1/2 -translate-x-1/2 w-[40rem] h-[24rem] rounded-full opacity-40 blur-3xl pointer-events-none"
+          className="absolute -top-32 left-1/2 -translate-x-1/2 w-[40rem] h-[24rem] rounded-full opacity-40 blur-3xl pointer-events-none transition-all duration-700"
           style={{
-            background: 'radial-gradient(circle, rgba(254, 240, 138, 0.6) 0%, rgba(251, 191, 36, 0.25) 60%, transparent 100%)'
+            background: activePal.glow || 'radial-gradient(circle, rgba(37, 99, 235, 0.32) 0%, rgba(30, 64, 175, 0.12) 60%, transparent 100%)'
           }}
         />
       </div>
@@ -192,16 +197,24 @@ export default function App() {
       <DecadeElevator
         currentYear={currentYear}
         onJumpToYear={handleJumpToYear}
+        palette={activePal}
       />
 
       {/* Main Continuous Descent Stream */}
       <main className="px-4 pt-4 sm:pt-6 pb-12 max-w-5xl mx-auto relative z-10">
 
-        {/* World Champion Archive */}
+        {/* World Champion Archive Badge */}
         <div className="pt-2 sm:pt-4 pb-4 text-center select-none">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-900/6 border border-emerald-900/12 shadow-2xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-700 animate-pulse" />
-            <span className="tracking-[0.2em] uppercase text-[10px] sm:text-[11px] font-bold text-emerald-950">
+          <div 
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border shadow-2xs transition-colors"
+            style={{
+              backgroundColor: activePal.pageBg === '#FFFFFF' ? (activePal.navBg || 'rgba(30, 64, 175, 0.06)') : 'rgba(255, 255, 255, 0.15)',
+              borderColor: activePal.pageBg === '#FFFFFF' ? (activePal.navBorder || 'rgba(30, 64, 175, 0.18)') : 'rgba(255, 255, 255, 0.28)',
+              color: activePal.pageBg === '#FFFFFF' ? (activePal.navText || '#1E3A8A') : '#FFFFFF'
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: activePal.pageBg === '#FFFFFF' ? (activePal.accentColor || '#3B82F6') : '#93C5FD' }} />
+            <span className="tracking-[0.2em] uppercase text-[10px] sm:text-[11px] font-bold">
               World Champion Archive
             </span>
           </div>
@@ -267,7 +280,10 @@ export default function App() {
       </main>
 
       {/* Ground Touchdown at Silverstone Airfield (1950) */}
-      <BedrockFooter onReturnToSurface={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
+      <BedrockFooter 
+        onReturnToSurface={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+        palette={activePal}
+      />
 
     </div>
   );

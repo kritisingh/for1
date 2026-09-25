@@ -8,7 +8,7 @@ import { getDriverPortrait } from '../data/driverPortraits';
 export default function SeasonCard({ 
   season, 
   globalViewMode, 
-  seasonCardPalette = 'eucalyptus-butter',
+  seasonCardPalette = 'oxford-midnight-bg',
   onSelectPalette
 }) {
   const { year, era, heroCar, drivers, constructors, constructorsApplicable } = season;
@@ -21,8 +21,8 @@ export default function SeasonCard({
     setActiveTab(globalViewMode);
   }, [globalViewMode]);
 
-  // Active color palette: Eucalyptus & Buttercream
-  const pal = SEASON_CARD_PALETTES[seasonCardPalette] || SEASON_CARD_PALETTES['eucalyptus-butter'];
+  // Active color palette
+  const pal = SEASON_CARD_PALETTES[seasonCardPalette] || SEASON_CARD_PALETTES['oxford-midnight-bg'];
 
   const driverList = drivers || [];
   const constructorList = constructors || [];
@@ -44,19 +44,32 @@ export default function SeasonCard({
           TOP INCOMING FLIGHT CONNECTOR (Vertical glideslope connecting downward)
           ========================================================================= */}
       <div className="flex flex-col items-center mb-3">
-        <div className="w-[1.5px] h-10 border-l-2 border-dashed border-emerald-700/35" />
-        <div className="p-1.5 rounded-full bg-emerald-800/10 border border-emerald-800/20 text-emerald-800 mt-1 shadow-2xs">
+        <div 
+          className="w-[1.5px] h-10 border-l-2 border-dashed transition-colors"
+          style={{ borderColor: pal.connectorColor || pal.accentColor }} 
+        />
+        <div 
+          className="p-1.5 rounded-full border mt-1 shadow-2xs transition-colors"
+          style={{ 
+            backgroundColor: pal.pageBg === '#FFFFFF' ? pal.bgCard : 'rgba(255, 255, 255, 0.20)',
+            borderColor: pal.pageBg === '#FFFFFF' ? pal.borderSubtle : 'rgba(255, 255, 255, 0.40)',
+            color: pal.pageBg === '#FFFFFF' ? pal.titleColor : '#FFFFFF'
+          }}
+        >
           <Plane className="w-3.5 h-3.5 transform rotate-180" />
         </div>
-        <div className="w-[1.5px] h-4 border-l-2 border-dashed border-emerald-700/35" />
+        <div 
+          className="w-[1.5px] h-4 border-l-2 border-dashed transition-colors"
+          style={{ borderColor: pal.connectorColor || pal.accentColor }} 
+        />
       </div>
 
       {/* =========================================================================
-          FLIGHT GLIDESLOPE CARD (Eucalyptus & Buttercream Deck)
+          FLIGHT GLIDESLOPE CARD
           ========================================================================= */}
       <article 
         id={`year-${year}`} 
-        className="scroll-mt-24 w-full max-w-3xl xl:max-w-4xl mx-auto rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden transition-all duration-300 shadow-[0_20px_50px_-10px_rgba(10,35,18,0.22)]"
+        className="scroll-mt-24 w-full max-w-3xl xl:max-w-4xl mx-auto rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden transition-all duration-300 shadow-[0_16px_45px_-8px_rgba(30,58,138,0.12),0_4px_12px_rgba(0,0,0,0.03)]"
         style={{
           backgroundColor: pal.bg,
           border: `1.5px solid ${pal.border}`
@@ -732,8 +745,14 @@ export default function SeasonCard({
           BOTTOM OUTGOING FLIGHT CONNECTOR (Connecting downward into next year)
           ========================================================================= */}
       <div className="flex flex-col items-center mt-3">
-        <div className="w-[1.5px] h-10 border-l-2 border-dashed border-emerald-700/35" />
-        <div className="w-2 h-2 rounded-full bg-emerald-700/50 mt-1" />
+        <div 
+          className="w-[1.5px] h-10 border-l-2 border-dashed transition-colors" 
+          style={{ borderColor: pal.connectorColor || pal.accentColor }}
+        />
+        <div 
+          className="w-2 h-2 rounded-full mt-1 transition-colors" 
+          style={{ backgroundColor: pal.pageBg === '#FFFFFF' ? pal.accentColor : '#FFFFFF' }}
+        />
       </div>
 
     </div>

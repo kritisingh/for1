@@ -97,12 +97,12 @@ const ERA_META = {
   }
 };
 
-export default function SkyLayerMarker({ layer, palette = 'sage-black' }) {
+export default function SkyLayerMarker({ layer, palette = 'oxford-midnight-bg' }) {
   const { name, subName, description, year } = layer;
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Exact same Soft Sage palette tokens as SeasonCard
-  const pal = SEASON_CARD_PALETTES[palette] || SEASON_CARD_PALETTES['sage-black'];
+  // Exact same palette tokens as SeasonCard
+  const pal = SEASON_CARD_PALETTES[palette] || SEASON_CARD_PALETTES['oxford-midnight-bg'];
 
   const meta = ERA_META[year] || {
     roman: '✦',
@@ -119,7 +119,7 @@ export default function SkyLayerMarker({ layer, palette = 'sage-black' }) {
 
       {/* Horizontal Milestone Bar */}
       <div 
-        className="w-full rounded-2xl sm:rounded-3xl p-5 sm:p-6 border shadow-[0_12px_30px_-8px_rgba(10,35,18,0.18)] transition-all duration-300"
+        className="w-full rounded-2xl sm:rounded-3xl p-5 sm:p-6 border shadow-[0_12px_30px_-8px_rgba(30,58,138,0.10),0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-300"
         style={{
           backgroundColor: pal.bg,
           borderColor: pal.border
@@ -175,7 +175,10 @@ export default function SkyLayerMarker({ layer, palette = 'sage-black' }) {
           </div>
 
           {/* Right: Compact Technical Spec Badges */}
-          <div className="flex flex-wrap md:flex-col items-start md:items-end gap-1.5 shrink-0 pt-2.5 md:pt-0 border-t md:border-t-0 border-emerald-900/15">
+          <div 
+            className="flex flex-wrap md:flex-col items-start md:items-end gap-1.5 shrink-0 pt-2.5 md:pt-0 border-t md:border-t-0"
+            style={{ borderColor: pal.borderSubtle }}
+          >
             <span 
               className="text-[11px] px-3 py-1 rounded-xl border font-medium shadow-2xs" 
               style={{ backgroundColor: pal.bgCard, borderColor: pal.borderSubtle, color: pal.bodyTextColor }}

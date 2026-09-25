@@ -147,6 +147,441 @@ export const LIGHT_THEMES = [
  */
 export const SEASON_CARD_PALETTES = {
   // =========================================================================
+  // OXFORD MIDNIGHT ROYAL CANVAS (Permanent Selection)
+  // =========================================================================
+  'oxford-midnight-bg': {
+    id: 'oxford-midnight-bg',
+    name: 'Oxford Midnight Canvas',
+    subname: 'Midnight Oxford Blue Page with White Cards',
+    fontGroup: 'blue',
+    fontLabel: 'Oxford Navy Page',
+    tag: 'Oxford Midnight',
+    badge: 'Selected',
+    emoji: '🏛️',
+    pageBg: '#0F1E36',          // Oxford Midnight Navy-Royal
+    pageTextColor: '#FFFFFF',
+    headerBg: 'rgba(255, 255, 255, 0.95)',
+    glow: 'radial-gradient(circle, rgba(96, 165, 250, 0.25) 0%, rgba(15, 30, 54, 0.15) 60%, transparent 100%)',
+    bg: '#FFFFFF',
+    bgCard: '#FAFBFD',
+    bgSubtle: '#F1F5F9',
+    border: '#CBD5E1',
+    borderSubtle: 'rgba(15, 30, 54, 0.12)',
+    titleColor: '#0F1E36',
+    accentColor: '#1D4ED8',
+    subtextColor: '#1E3A8A',
+    bodyTextColor: '#1E293B',
+    badgeBg: '#F1F5F9',
+    badgeText: '#0F1E36',
+    badgeBorder: '#CBD5E1',
+    tableRowHover: 'rgba(15, 30, 54, 0.04)',
+    navActiveBg: '#0F1E36',
+    navActiveText: '#FFFFFF',
+    navText: '#0F1E36',
+    navBorder: 'rgba(15, 30, 54, 0.20)',
+    navBg: '#F8FAFC',
+    connectorColor: 'rgba(255, 255, 255, 0.60)',
+    primaryDot: '#0F1E36',
+    secondaryDot: '#FFFFFF',
+    description: 'Bespoke British luxury aesthetic: deepest Oxford midnight blue page canvas with crisp white cards.'
+  },
+  'royal-bg-white-cards': {
+    id: 'royal-bg-white-cards',
+    name: 'Royal Blue Canvas & White Cards',
+    subname: 'Royal Blue Page Background with Pure White Cards',
+    fontGroup: 'blue',
+    fontLabel: 'Royal Blue Page Canvas',
+    tag: 'Royal Blue Background',
+    badge: 'Vibrant',
+    emoji: '🔵',
+    pageBg: '#1E3A8A',          // Royal Blue Page Background (Tailwind Blue 900)
+    pageTextColor: '#FFFFFF',
+    headerBg: 'rgba(255, 255, 255, 0.95)',
+    glow: 'radial-gradient(circle, rgba(96, 165, 250, 0.35) 0%, rgba(37, 99, 235, 0.15) 60%, transparent 100%)',
+    bg: '#FFFFFF',              // Pure White Card Surface
+    bgCard: '#FFFFFF',          // Pure White Inner Card
+    bgSubtle: '#F0F6FF',        // Soft Ice-Royal Blue Inset
+    border: '#BFDBFE',          // Soft Royal Blue Border
+    borderSubtle: 'rgba(30, 64, 175, 0.12)',
+    titleColor: '#1E3A8A',      // Deep Royal Blue Font
+    accentColor: '#2563EB',     // Vibrant Royal Blue Accent
+    subtextColor: '#2563EB',    // Royal Blue Subtext & Metadata
+    bodyTextColor: '#1E40AF',   // Rich Royal Blue Body Font
+    badgeBg: '#EFF6FF',
+    badgeText: '#1E3A8A',
+    badgeBorder: '#BFDBFE',
+    tableRowHover: 'rgba(37, 99, 235, 0.05)',
+    navActiveBg: '#1D4ED8',
+    navActiveText: '#FFFFFF',
+    navText: '#1E3A8A',
+    navBorder: 'rgba(30, 64, 175, 0.18)',
+    navBg: '#F0F6FF',
+    connectorColor: 'rgba(255, 255, 255, 0.65)',
+    primaryDot: '#1E3A8A',
+    secondaryDot: '#FFFFFF',
+    description: 'Immersive Royal Blue page background with clean, high-contrast pure white cards, royal blue typography, and luminous white connectors.'
+  },
+  'cobalt-bg-white-cards': {
+    id: 'cobalt-bg-white-cards',
+    name: 'Electric Cobalt Canvas',
+    subname: 'Vibrant Cobalt Page with Pure White Cards',
+    fontGroup: 'blue',
+    fontLabel: 'Electric Cobalt Page',
+    tag: 'Vibrant Page',
+    badge: 'High Energy',
+    emoji: '⚡',
+    pageBg: '#1D4ED8',          // Electric Cobalt Blue Page Background
+    pageTextColor: '#FFFFFF',
+    headerBg: 'rgba(255, 255, 255, 0.95)',
+    glow: 'radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(29, 78, 216, 0.15) 60%, transparent 100%)',
+    bg: '#FFFFFF',
+    bgCard: '#F8FAFF',
+    bgSubtle: '#EBF3FF',
+    border: '#93C5FD',
+    borderSubtle: 'rgba(29, 78, 216, 0.14)',
+    titleColor: '#1D4ED8',
+    accentColor: '#0284C7',
+    subtextColor: '#2563EB',
+    bodyTextColor: '#1E3A8A',
+    badgeBg: '#DBEAFE',
+    badgeText: '#1D4ED8',
+    badgeBorder: '#93C5FD',
+    tableRowHover: 'rgba(29, 78, 216, 0.06)',
+    navActiveBg: '#1D4ED8',
+    navActiveText: '#FFFFFF',
+    navText: '#1D4ED8',
+    navBorder: 'rgba(29, 78, 216, 0.22)',
+    navBg: '#EFF6FF',
+    connectorColor: 'rgba(255, 255, 255, 0.70)',
+    primaryDot: '#1D4ED8',
+    secondaryDot: '#FFFFFF',
+    description: 'High-energy modern electric cobalt page background with crisp white floating cards and azure highlights.'
+  },
+
+  // =========================================================================
+  // WHITE BACKGROUND & BLUE FONT
+  // =========================================================================
+  'royal-white': {
+    id: 'royal-white',
+    name: 'Classic Royal on White',
+    subname: 'Pure White Background & Deep Royal Blue Font',
+    fontGroup: 'blue',
+    fontLabel: 'Royal Blue Font',
+    tag: 'White Bg & Blue Font',
+    badge: 'Recommended',
+    emoji: '💎',
+    pageBg: '#FFFFFF',          // Pure Crisp White Background
+    headerBg: 'rgba(255, 255, 255, 0.95)',
+    glow: 'radial-gradient(circle, rgba(37, 99, 235, 0.16) 0%, rgba(147, 197, 253, 0.08) 60%, transparent 100%)',
+    bg: '#FFFFFF',              // Pure Crisp White Card Surface
+    bgCard: '#FFFFFF',          // Pure White Inner Card
+    bgSubtle: '#F0F6FF',        // Soft Ice Blue Inset
+    border: '#BFDBFE',          // Soft Royal Blue Border
+    borderSubtle: 'rgba(30, 64, 175, 0.12)',
+    titleColor: '#1E3A8A',      // Deep Royal Blue Font (Years, Driver Names, Titles)
+    accentColor: '#2563EB',     // Vibrant Royal Blue Accent
+    subtextColor: '#2563EB',    // Royal Blue Subtext & Metadata
+    bodyTextColor: '#1E40AF',   // Royal Blue Body Font
+    badgeBg: '#EFF6FF',
+    badgeText: '#1E3A8A',
+    badgeBorder: '#BFDBFE',
+    tableRowHover: 'rgba(37, 99, 235, 0.05)',
+    navActiveBg: '#1D4ED8',     // Solid Royal Blue for Active Controls
+    navActiveText: '#FFFFFF',   // White Text for Active Controls
+    navText: '#1E3A8A',         // Royal Blue for Inactive Controls
+    navBorder: 'rgba(30, 64, 175, 0.18)',
+    navBg: '#F0F6FF',
+    connectorColor: 'rgba(37, 99, 235, 0.40)',
+    primaryDot: '#FFFFFF',
+    secondaryDot: '#1E3A8A',
+    description: 'Crisp editorial look with pure white background and pure white cards framed by clean soft blue borders, with deep Royal Blue typography, titles, and accents.'
+  },
+  'electric-azure-white': {
+    id: 'electric-azure-white',
+    name: 'Electric Azure on White',
+    subname: 'Pure White & Saturated Cobalt Blue Font',
+    fontGroup: 'blue',
+    fontLabel: 'Electric Cobalt Font',
+    tag: 'Vibrant & Modern',
+    badge: 'High Contrast',
+    emoji: '⚡',
+    pageBg: '#FFFFFF',
+    headerBg: 'rgba(255, 255, 255, 0.95)',
+    glow: 'radial-gradient(circle, rgba(29, 78, 216, 0.15) 0%, rgba(56, 189, 248, 0.08) 60%, transparent 100%)',
+    bg: '#FFFFFF',
+    bgCard: '#F8FAFF',
+    bgSubtle: '#EBF3FF',
+    border: '#93C5FD',
+    borderSubtle: 'rgba(29, 78, 216, 0.14)',
+    titleColor: '#1D4ED8',
+    accentColor: '#0284C7',
+    subtextColor: '#2563EB',
+    bodyTextColor: '#1E3A8A',
+    badgeBg: '#DBEAFE',
+    badgeText: '#1D4ED8',
+    badgeBorder: '#93C5FD',
+    tableRowHover: 'rgba(29, 78, 216, 0.06)',
+    navActiveBg: '#1D4ED8',
+    navActiveText: '#FFFFFF',
+    navText: '#1D4ED8',
+    navBorder: 'rgba(29, 78, 216, 0.22)',
+    navBg: '#EFF6FF',
+    connectorColor: 'rgba(29, 78, 216, 0.40)',
+    primaryDot: '#FFFFFF',
+    secondaryDot: '#1D4ED8',
+    description: 'Vibrant modern telemetry style: pure white background and surfaces combined with electric cobalt and azure blue typography for ultra-crisp legibility.'
+  },
+  'oxford-navy-white': {
+    id: 'oxford-navy-white',
+    name: 'Oxford Midnight on White',
+    subname: 'Pure White & Deepest Oxford Blue Font',
+    fontGroup: 'blue',
+    fontLabel: 'Oxford Navy Font',
+    tag: 'Classic Heritage',
+    badge: 'Luxury',
+    emoji: '🏛️',
+    pageBg: '#FFFFFF',
+    headerBg: 'rgba(255, 255, 255, 0.95)',
+    glow: 'radial-gradient(circle, rgba(15, 30, 54, 0.12) 0%, rgba(148, 163, 184, 0.08) 60%, transparent 100%)',
+    bg: '#FFFFFF',
+    bgCard: '#FAFBFD',
+    bgSubtle: '#F1F5F9',
+    border: '#CBD5E1',
+    borderSubtle: 'rgba(15, 30, 54, 0.12)',
+    titleColor: '#0F1E36',
+    accentColor: '#1D4ED8',
+    subtextColor: '#1E3A8A',
+    bodyTextColor: '#1E293B',
+    badgeBg: '#F1F5F9',
+    badgeText: '#0F1E36',
+    badgeBorder: '#CBD5E1',
+    tableRowHover: 'rgba(15, 30, 54, 0.04)',
+    navActiveBg: '#0F1E36',
+    navActiveText: '#FFFFFF',
+    navText: '#0F1E36',
+    navBorder: 'rgba(15, 30, 54, 0.20)',
+    navBg: '#F8FAFC',
+    connectorColor: 'rgba(15, 30, 54, 0.35)',
+    primaryDot: '#FFFFFF',
+    secondaryDot: '#0F1E36',
+    description: 'Timeless British luxury aesthetic: crisp pure white canvas with deepest Oxford midnight blue serif typography.'
+  },
+  'french-bleu-white': {
+    id: 'french-bleu-white',
+    name: 'Bleu de France on White',
+    subname: 'Pure White & Historic Racing Blue Font',
+    fontGroup: 'blue',
+    fontLabel: 'Bleu de France Font',
+    tag: 'Vintage Racing',
+    badge: 'Heritage',
+    emoji: '🏎️',
+    pageBg: '#FFFFFF',
+    headerBg: 'rgba(255, 255, 255, 0.95)',
+    glow: 'radial-gradient(circle, rgba(37, 90, 168, 0.14) 0%, rgba(147, 197, 253, 0.08) 60%, transparent 100%)',
+    bg: '#FFFFFF',
+    bgCard: '#FFFFFF',
+    bgSubtle: '#F0F5FC',
+    border: '#BFD4EE',
+    borderSubtle: 'rgba(37, 90, 168, 0.14)',
+    titleColor: '#255AA8',
+    accentColor: '#1D498A',
+    subtextColor: '#255AA8',
+    bodyTextColor: '#1E3A8A',
+    badgeBg: '#F0F5FC',
+    badgeText: '#255AA8',
+    badgeBorder: '#BFD4EE',
+    tableRowHover: 'rgba(37, 90, 168, 0.05)',
+    navActiveBg: '#255AA8',
+    navActiveText: '#FFFFFF',
+    navText: '#255AA8',
+    navBorder: 'rgba(37, 90, 168, 0.20)',
+    navBg: '#F0F5FC',
+    connectorColor: 'rgba(37, 90, 168, 0.35)',
+    primaryDot: '#FFFFFF',
+    secondaryDot: '#255AA8',
+    description: 'Vintage Grand Prix Bugatti and Alpine heritage: pure gallery white with Bleu de France typography.'
+  },
+
+  // =========================================================================
+  // INVERTED OPTIONS (Blue Decks & White Font)
+  // =========================================================================
+  'royal-monaco': {
+    id: 'royal-monaco',
+    name: 'Royal Monaco (Blue Card)',
+    subname: 'Royal Blue Decks & Crisp White Font',
+    fontGroup: 'white',
+    fontLabel: 'Crisp White Font',
+    tag: 'Classic Royal Blue',
+    badge: 'Recommended',
+    emoji: '👑',
+    pageBg: '#FFFFFF',
+    headerBg: 'rgba(255, 255, 255, 0.94)',
+    glow: 'radial-gradient(circle, rgba(37, 99, 235, 0.32) 0%, rgba(30, 64, 175, 0.12) 60%, transparent 100%)',
+    bg: '#1E3A8A',           // Deep Royal Blue
+    bgCard: '#172554',       // Midnight Royal Navy
+    bgSubtle: '#1E293B',     // Slate Inset
+    border: '#3B82F6',       // Electric Blue Accent Border
+    borderSubtle: 'rgba(255, 255, 255, 0.16)',
+    titleColor: '#FFFFFF',   // Pure White
+    accentColor: '#60A5FA',  // Luminous Azure
+    subtextColor: '#BFDBFE', // Pale Ice Blue
+    bodyTextColor: '#F8FAFC',// Bright White
+    badgeBg: 'rgba(255, 255, 255, 0.12)',
+    badgeText: '#FFFFFF',
+    badgeBorder: 'rgba(255, 255, 255, 0.28)',
+    tableRowHover: 'rgba(255, 255, 255, 0.08)',
+    navActiveBg: '#1D4ED8',
+    navActiveText: '#FFFFFF',
+    navText: '#1E3A8A',
+    navBorder: 'rgba(30, 58, 138, 0.18)',
+    navBg: 'rgba(30, 58, 138, 0.06)',
+    connectorColor: 'rgba(37, 99, 235, 0.50)',
+    primaryDot: '#1E40AF',
+    secondaryDot: '#FFFFFF',
+    description: 'The iconic Grand Prix aesthetic: commanding Royal Blue cockpit decks with brilliant crisp white typography and vivid electric azure accents on a pure gallery white canvas.'
+  },
+  'azure-porcelain': {
+    id: 'azure-porcelain',
+    name: 'Azure Porcelain',
+    subname: 'Pure White Deck with Royal Blue Ink',
+    fontGroup: 'dark',
+    fontLabel: 'Royal Blue Ink Font',
+    tag: 'Minimalist White Card',
+    badge: 'Editorial',
+    emoji: '❄️',
+    pageBg: '#F8FAFC',
+    headerBg: 'rgba(248, 250, 252, 0.94)',
+    glow: 'radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, rgba(147, 197, 253, 0.12) 60%, transparent 100%)',
+    bg: '#FFFFFF',           // Crisp White Deck
+    bgCard: '#F0F6FE',       // Porcelain Azure
+    bgSubtle: '#E2EDFD',     // Ice Inset
+    border: '#93C5FD',       // Sky Border
+    borderSubtle: 'rgba(30, 64, 175, 0.12)',
+    titleColor: '#1E3A8A',   // Deep Royal Blue
+    accentColor: '#2563EB',  // Vibrant Royal Blue
+    subtextColor: '#1D4ED8', // Navy Blue
+    bodyTextColor: '#0F172A',// Slate Obsidian
+    badgeBg: 'rgba(37, 99, 235, 0.08)',
+    badgeText: '#1E3A8A',
+    badgeBorder: 'rgba(37, 99, 235, 0.25)',
+    tableRowHover: 'rgba(37, 99, 235, 0.04)',
+    navActiveBg: '#1E3A8A',
+    navActiveText: '#FFFFFF',
+    navText: '#1E3A8A',
+    navBorder: 'rgba(30, 64, 175, 0.16)',
+    navBg: 'rgba(30, 64, 175, 0.06)',
+    connectorColor: 'rgba(37, 99, 235, 0.35)',
+    primaryDot: '#FFFFFF',
+    secondaryDot: '#1E3A8A',
+    description: 'Clean Scandinavian editorial minimalism. Crisp white surfaces framed by royal blue borders, ice-tinted porcelain insets, and dark royal blue typography.'
+  },
+  'electric-cobalt': {
+    id: 'electric-cobalt',
+    name: 'Electric Cobalt',
+    subname: 'Vibrant Cobalt & Luminous White',
+    fontGroup: 'white',
+    fontLabel: 'Bright White Font',
+    tag: 'High Velocity',
+    badge: 'Modern Aero',
+    emoji: '⚡',
+    pageBg: '#F0F4FA',
+    headerBg: 'rgba(240, 244, 250, 0.94)',
+    glow: 'radial-gradient(circle, rgba(37, 99, 235, 0.35) 0%, rgba(56, 189, 248, 0.20) 60%, transparent 100%)',
+    bg: '#1D4ED8',           // Vibrant Cobalt
+    bgCard: '#1E3A8A',       // Deep Cobalt
+    bgSubtle: '#172554',     // Dark Cobalt
+    border: '#60A5FA',       // Cyan-Blue Glow
+    borderSubtle: 'rgba(255, 255, 255, 0.22)',
+    titleColor: '#FFFFFF',   // Brilliant White
+    accentColor: '#38BDF8',  // Electric Cyan
+    subtextColor: '#BAE6FD', // Pale Cyan
+    bodyTextColor: '#F0F9FF',// Frost White
+    badgeBg: 'rgba(255, 255, 255, 0.15)',
+    badgeText: '#FFFFFF',
+    badgeBorder: 'rgba(255, 255, 255, 0.35)',
+    tableRowHover: 'rgba(255, 255, 255, 0.10)',
+    navActiveBg: '#2563EB',
+    navActiveText: '#FFFFFF',
+    navText: '#1D4ED8',
+    navBorder: 'rgba(29, 78, 216, 0.20)',
+    navBg: 'rgba(29, 78, 216, 0.06)',
+    connectorColor: 'rgba(56, 189, 248, 0.50)',
+    primaryDot: '#1D4ED8',
+    secondaryDot: '#38BDF8',
+    description: 'High-octane modern Formula 1 night telemetry vibe. Electric cobalt blue surfaces accented with neon cyan highlights and brilliant white text.'
+  },
+  'royal-oxford': {
+    id: 'royal-oxford',
+    name: 'Royal Oxford & Silver',
+    subname: 'Oxford Midnight & Polished Silver White',
+    fontGroup: 'white',
+    fontLabel: 'Silver White Font',
+    tag: 'Luxury Chronograph',
+    badge: 'Timeless',
+    emoji: '🏛️',
+    pageBg: '#FAFBFD',
+    headerBg: 'rgba(250, 251, 253, 0.94)',
+    glow: 'radial-gradient(circle, rgba(30, 58, 138, 0.25) 0%, rgba(148, 163, 184, 0.15) 60%, transparent 100%)',
+    bg: '#0F1E36',           // Oxford Midnight
+    bgCard: '#182A4A',       // Deep Oxford
+    bgSubtle: '#0B1526',     // Inset Obsidian
+    border: 'rgba(203, 213, 225, 0.35)', // Silver Border
+    borderSubtle: 'rgba(255, 255, 255, 0.14)',
+    titleColor: '#FFFFFF',   // Pure White
+    accentColor: '#93C5FD',  // Ice Blue Highlight
+    subtextColor: '#CBD5E1', // Platinum Silver
+    bodyTextColor: '#F1F5F9',// Crisp Silver White
+    badgeBg: 'rgba(255, 255, 255, 0.10)',
+    badgeText: '#FFFFFF',
+    badgeBorder: 'rgba(203, 213, 225, 0.30)',
+    tableRowHover: 'rgba(255, 255, 255, 0.06)',
+    navActiveBg: '#0F1E36',
+    navActiveText: '#FFFFFF',
+    navText: '#0F1E36',
+    navBorder: 'rgba(15, 30, 54, 0.20)',
+    navBg: 'rgba(15, 30, 54, 0.06)',
+    connectorColor: 'rgba(30, 58, 138, 0.40)',
+    primaryDot: '#0F1E36',
+    secondaryDot: '#E2E8F0',
+    description: 'Prestige luxury and chronograph-inspired styling. Deep Oxford midnight blue paired with cool platinum silver borders and pure white typography.'
+  },
+  'french-racing': {
+    id: 'french-racing',
+    name: 'French Racing Blue',
+    subname: 'Historic Bleu de France & Gallery White',
+    fontGroup: 'white',
+    fontLabel: 'Pure White Font',
+    tag: 'Historic Heritage',
+    badge: 'Vintage',
+    emoji: '🏎️',
+    pageBg: '#FFFFFF',
+    headerBg: 'rgba(255, 255, 255, 0.94)',
+    glow: 'radial-gradient(circle, rgba(37, 99, 235, 0.28) 0%, rgba(96, 165, 250, 0.15) 60%, transparent 100%)',
+    bg: '#255AA8',           // French Racing Blue
+    bgCard: '#1D498A',       // Deep Alpine Blue
+    bgSubtle: '#16396E',
+    border: 'rgba(255, 255, 255, 0.30)',
+    borderSubtle: 'rgba(255, 255, 255, 0.16)',
+    titleColor: '#FFFFFF',
+    accentColor: '#93C5FD',
+    subtextColor: '#DBEAFE',
+    bodyTextColor: '#F8FAFC',
+    badgeBg: 'rgba(255, 255, 255, 0.14)',
+    badgeText: '#FFFFFF',
+    badgeBorder: 'rgba(255, 255, 255, 0.32)',
+    tableRowHover: 'rgba(255, 255, 255, 0.08)',
+    navActiveBg: '#255AA8',
+    navActiveText: '#FFFFFF',
+    navText: '#255AA8',
+    navBorder: 'rgba(37, 90, 168, 0.20)',
+    navBg: 'rgba(37, 90, 168, 0.06)',
+    connectorColor: 'rgba(37, 90, 168, 0.45)',
+    primaryDot: '#255AA8',
+    secondaryDot: '#FFFFFF',
+    description: 'Evocative of historic Bugatti, Matra, and Alpine Formula 1 teams in Bleu de France. Saturated, authentic, and distinctly European.'
+  },
+
+  // =========================================================================
   // 1. BLACK FONT ON LIGHT GREEN (Editorial, High-Contrast, Literary)
   // =========================================================================
   'celadon-black': {
@@ -324,10 +759,14 @@ export const SEASON_CARD_PALETTES = {
   'eucalyptus-butter': {
     id: 'eucalyptus-butter',
     name: 'Deep Eucalyptus',
+    subname: 'British Eucalyptus & Buttercream',
     fontGroup: 'yellow',
     fontLabel: 'Buttercream Font',
     tag: 'Current Dark Tone',
     emoji: '🌲',
+    pageBg: '#FDF5DF',
+    headerBg: 'rgba(253, 245, 223, 0.94)',
+    glow: 'radial-gradient(circle, rgba(254, 240, 138, 0.6) 0%, rgba(251, 191, 36, 0.25) 60%, transparent 100%)',
     bg: '#1C3825',           // Deep Eucalyptus
     bgCard: '#244730',
     bgSubtle: '#152C1D',
@@ -340,6 +779,38 @@ export const SEASON_CARD_PALETTES = {
     badgeBg: 'rgba(254, 240, 138, 0.14)',
     badgeText: '#FEF08A',
     badgeBorder: 'rgba(254, 240, 138, 0.35)',
-    tableRowHover: 'rgba(254, 240, 138, 0.08)'
+    tableRowHover: 'rgba(254, 240, 138, 0.08)',
+    navActiveBg: '#1C3825',
+    navActiveText: '#FEF08A',
+    navText: '#1C3825',
+    navBorder: 'rgba(28, 56, 37, 0.20)',
+    navBg: 'rgba(28, 56, 37, 0.06)',
+    connectorColor: 'rgba(28, 56, 37, 0.35)',
+    primaryDot: '#1C3825',
+    secondaryDot: '#FEF08A',
+    description: 'Deep British racing eucalyptus green paired with warm buttercream yellow typography.'
   }
 };
+
+/**
+ * Curated Palette Groups for UI Switcher
+ */
+export const PALETTE_GROUPS = [
+  {
+    groupName: 'Selected Permanent Theme',
+    palettes: ['oxford-midnight-bg', 'royal-bg-white-cards', 'cobalt-bg-white-cards']
+  },
+  {
+    groupName: 'White Background & Blue Font',
+    palettes: ['royal-white', 'electric-azure-white', 'oxford-navy-white', 'french-bleu-white']
+  },
+  {
+    groupName: 'Inverted: Blue Decks & White Font',
+    palettes: ['royal-monaco', 'electric-cobalt', 'royal-oxford', 'french-racing']
+  },
+  {
+    groupName: 'Previous Green & Butter Themes',
+    palettes: ['sage-black', 'eucalyptus-butter', 'celadon-black', 'laurel-leaf']
+  }
+];
+
