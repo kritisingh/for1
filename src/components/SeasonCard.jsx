@@ -8,7 +8,7 @@ import { getDriverPortrait } from '../data/driverPortraits';
 export default function SeasonCard({ 
   season, 
   globalViewMode, 
-  seasonCardPalette = 'oxford-midnight-bg',
+  seasonCardPalette = 'amber-walnut-dark',
   onSelectPalette
 }) {
   const { year, era, heroCar, drivers, constructors, constructorsApplicable } = season;
@@ -22,7 +22,7 @@ export default function SeasonCard({
   }, [globalViewMode]);
 
   // Active color palette
-  const pal = SEASON_CARD_PALETTES[seasonCardPalette] || SEASON_CARD_PALETTES['oxford-midnight-bg'];
+  const pal = SEASON_CARD_PALETTES[seasonCardPalette] || SEASON_CARD_PALETTES['amber-walnut-dark'];
 
   const driverList = drivers || [];
   const constructorList = constructors || [];
@@ -49,14 +49,15 @@ export default function SeasonCard({
           style={{ borderColor: pal.connectorColor || pal.accentColor }} 
         />
         <div 
-          className="p-1.5 rounded-full border mt-1 shadow-2xs transition-colors"
+          className="p-1.5 rounded-full border mt-1 shadow-md transition-all flex items-center justify-center"
           style={{ 
-            backgroundColor: pal.pageBg === '#FFFFFF' ? pal.bgCard : 'rgba(255, 255, 255, 0.20)',
-            borderColor: pal.pageBg === '#FFFFFF' ? pal.borderSubtle : 'rgba(255, 255, 255, 0.40)',
-            color: pal.pageBg === '#FFFFFF' ? pal.titleColor : '#FFFFFF'
+            background: 'linear-gradient(135deg, #C77448 0%, #BB6C43 100%)',
+            borderColor: 'rgba(255, 255, 255, 0.35)',
+            boxShadow: '0 4px 12px -2px rgba(187, 108, 67, 0.45)',
+            color: '#FFFFFF'
           }}
         >
-          <Plane className="w-3.5 h-3.5 transform rotate-180" />
+          <Plane className="w-3.5 h-3.5 transform rotate-180" fill="currentColor" />
         </div>
         <div 
           className="w-[1.5px] h-4 border-l-2 border-dashed transition-colors"
@@ -89,19 +90,19 @@ export default function SeasonCard({
             {/* Year & Horizon Attitude Wings */}
             <div className="flex items-center gap-4">
               <span 
-                className="font-editorial text-4xl sm:text-5xl md:text-6xl font-normal tracking-tight leading-none drop-shadow-sm"
+                className="font-editorial text-2xl sm:text-3xl font-normal tracking-wider leading-none"
                 style={{ color: pal.titleColor }}
               >
                 {year}
               </span>
               
-              <div className="h-10 w-[1.5px] opacity-25 hidden sm:block" style={{ backgroundColor: pal.titleColor }} />
+              <div className="h-8 w-[1.5px] opacity-20 hidden sm:block" style={{ backgroundColor: pal.titleColor }} />
 
-              <div className="flex flex-col">
+              <div className="flex flex-col font-body">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: pal.accentColor }} />
+                  <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: pal.accentColor }} />
                   <span 
-                    className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em]"
+                    className="text-[11px] font-medium uppercase tracking-wider"
                     style={{ color: pal.subtextColor }}
                   >
                     {era?.name || 'Grand Prix Season'}
@@ -111,14 +112,14 @@ export default function SeasonCard({
                   className="text-xs font-normal mt-0.5"
                   style={{ color: pal.bodyTextColor, opacity: 0.9 }}
                 >
-                  Engine Spec: <strong style={{ color: pal.titleColor }}>{era?.engine}</strong>
+                  Engine Spec: <span className="font-medium" style={{ color: pal.titleColor }}>{era?.engine}</span>
                 </span>
               </div>
             </div>
 
             {/* Drivers vs Constructors Flight Selector */}
             <div 
-              className="p-1 rounded-xl flex items-center text-xs font-medium border"
+              className="p-1 rounded-xl flex items-center text-xs font-medium font-body border"
               style={{
                 backgroundColor: pal.bgSubtle,
                 borderColor: pal.borderSubtle
@@ -126,7 +127,7 @@ export default function SeasonCard({
             >
               <button
                 onClick={() => setActiveTab('drivers')}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer font-semibold"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all cursor-pointer font-medium"
                 style={{
                   backgroundColor: activeTab === 'drivers' ? pal.titleColor : 'transparent',
                   color: activeTab === 'drivers' ? pal.bg : pal.bodyTextColor
@@ -138,7 +139,7 @@ export default function SeasonCard({
               
               <button
                 onClick={() => setActiveTab('constructors')}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer font-semibold"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all cursor-pointer font-medium"
                 style={{
                   backgroundColor: activeTab === 'constructors' ? pal.titleColor : 'transparent',
                   color: activeTab === 'constructors' ? pal.bg : pal.bodyTextColor
@@ -211,7 +212,7 @@ export default function SeasonCard({
 
                       {/* Gold Laurel Badge */}
                       <div 
-                        className="absolute -bottom-1 -right-1 font-editorial font-bold text-[10px] px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1"
+                        className="absolute -bottom-1 -right-1 font-body font-medium text-xs px-2 py-0.5 rounded-full shadow-xs flex items-center gap-1"
                         style={{
                           backgroundColor: pal.titleColor,
                           color: pal.bg
@@ -225,7 +226,7 @@ export default function SeasonCard({
                     {/* Driver Details */}
                     <div className="flex-1 text-center sm:text-left">
                       <div 
-                        className="inline-flex items-center gap-2 text-xs font-semibold mb-0.5"
+                        className="inline-flex items-center gap-2 text-xs font-normal font-body mb-0.5"
                         style={{ color: pal.subtextColor }}
                       >
                         <span>World Drivers' Champion</span>
@@ -234,63 +235,66 @@ export default function SeasonCard({
                       </div>
                       
                       <h3 
-                        className="font-editorial text-2xl sm:text-3xl font-normal tracking-tight"
+                        className="font-editorial text-lg sm:text-xl font-normal tracking-wide"
                         style={{ color: pal.titleColor }}
                       >
                         {top3Drivers[0].name}
                       </h3>
                       
-                      <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
+                      <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2 font-body">
                         <span 
-                          className="px-3 py-0.5 rounded-full text-xs font-semibold border"
+                          className="px-2.5 py-0.5 rounded-full text-xs font-medium border"
                           style={{ 
-                            backgroundColor: `${top3Drivers[0].teamColor}25`,
-                            borderColor: `${top3Drivers[0].teamColor}60`,
+                            backgroundColor: `${top3Drivers[0].teamColor}15`,
+                            borderColor: `${top3Drivers[0].teamColor}40`,
                             color: pal.titleColor
                           }}
                         >
                           {top3Drivers[0].team}
                         </span>
                         <span 
-                          className="text-xs px-3 py-0.5 rounded-full border"
+                          className="text-xs px-2.5 py-0.5 rounded-full border font-normal"
                           style={{
                             backgroundColor: pal.bgSubtle,
                             borderColor: pal.borderSubtle,
                             color: pal.bodyTextColor
                           }}
                         >
-                          Chassis: <strong style={{ color: pal.titleColor }}>{heroCar}</strong>
+                          Chassis: <span className="font-medium" style={{ color: pal.titleColor }}>{heroCar}</span>
                         </span>
                       </div>
                     </div>
 
-                    {/* Points & Wins */}
+                    {/* Champion Points & Telemetry Capsule (Burnt Orange Shade) */}
                     <div 
-                      className="flex sm:flex-col items-center sm:items-end gap-3 sm:gap-0.5 px-4 py-2 sm:p-0 rounded-xl border sm:border-0"
+                      className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-3 sm:gap-1.5 px-4 py-2.5 sm:px-4 sm:py-3 rounded-2xl border shadow-md shrink-0 self-stretch sm:self-auto transition-all"
                       style={{
-                        backgroundColor: pal.bgSubtle,
-                        borderColor: pal.borderSubtle
+                        background: 'linear-gradient(135deg, #C77448 0%, #BB6C43 100%)',
+                        borderColor: 'rgba(255, 255, 255, 0.25)',
+                        boxShadow: '0 6px 18px -3px rgba(187, 108, 67, 0.35), 0 2px 6px rgba(0, 0, 0, 0.05)'
                       }}
                     >
-                      <div className="text-right">
-                        <div 
-                          className="text-[10px] uppercase font-bold tracking-wider"
-                          style={{ color: pal.subtextColor }}
-                        >
-                          Points
-                        </div>
-                        <div 
-                          className="font-editorial text-2xl sm:text-3xl font-normal"
-                          style={{ color: pal.titleColor }}
+                      <div className="flex items-baseline gap-1.5">
+                        <span 
+                          className="font-editorial text-2xl sm:text-3xl font-bold leading-none tracking-tight text-black"
                         >
                           {top3Drivers[0].points}
-                        </div>
+                        </span>
+                        <span 
+                          className="text-[10px] font-bold uppercase tracking-wider font-body text-black/75"
+                        >
+                          PTS
+                        </span>
                       </div>
                       <div 
-                        className="text-right text-xs font-bold"
-                        style={{ color: pal.accentColor }}
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold font-body px-2.5 py-0.5 rounded-full border shadow-2xs"
+                        style={{ 
+                          backgroundColor: 'rgba(0, 0, 0, 0.12)',
+                          borderColor: 'rgba(0, 0, 0, 0.22)',
+                          color: '#000000' 
+                        }}
                       >
-                        {top3Drivers[0].wins} {top3Drivers[0].wins === 1 ? 'Win' : 'Wins'}
+                        <span>{top3Drivers[0].wins} {top3Drivers[0].wins === 1 ? 'Win' : 'Wins'}</span>
                       </div>
                     </div>
 
@@ -318,7 +322,7 @@ export default function SeasonCard({
                     />
                     <div className="flex items-center gap-3 pl-1.5">
                       <span 
-                        className="text-xs font-bold w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border"
+                        className="text-xs font-medium font-body w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border"
                         style={{
                           backgroundColor: pal.bgSubtle,
                           borderColor: pal.borderSubtle,
@@ -329,13 +333,13 @@ export default function SeasonCard({
                       </span>
                       <div>
                         <div 
-                          className="font-editorial font-bold text-base leading-tight"
+                          className="font-editorial font-normal text-sm sm:text-base leading-snug tracking-wide"
                           style={{ color: pal.titleColor }}
                         >
                           {d.name}
                         </div>
                         <div 
-                          className="text-xs font-medium mt-0.5"
+                          className="text-xs font-normal font-body mt-0.5"
                           style={{ color: pal.bodyTextColor, opacity: 0.8 }}
                         >
                           {d.team}
@@ -344,14 +348,14 @@ export default function SeasonCard({
                     </div>
                     <div className="text-right shrink-0">
                       <div 
-                        className="font-editorial font-bold text-sm"
+                        className="font-editorial font-bold text-sm sm:text-base tracking-tight"
                         style={{ color: pal.titleColor }}
                       >
-                        {d.points} pts
+                        {d.points} <span className="text-[10px] font-bold uppercase font-body" style={{ color: pal.subtextColor }}>PTS</span>
                       </div>
                       <div 
-                        className="text-[10px] font-medium"
-                        style={{ color: pal.subtextColor }}
+                        className="text-xs font-medium font-body"
+                        style={{ color: pal.accentColor }}
                       >
                         {d.wins} {d.wins === 1 ? 'win' : 'wins'}
                       </div>
@@ -369,7 +373,7 @@ export default function SeasonCard({
               <div className="mt-5">
                 <button
                   onClick={() => setIsDriversExpanded(!isDriversExpanded)}
-                  className="w-full flex items-center justify-between py-2.5 px-4 rounded-xl border text-xs font-semibold transition-all cursor-pointer"
+                  className="w-full flex items-center justify-between py-2.5 px-4 rounded-xl border text-xs font-medium font-body transition-all cursor-pointer"
                   style={{
                     backgroundColor: pal.bgCard,
                     borderColor: pal.borderSubtle,
@@ -380,7 +384,7 @@ export default function SeasonCard({
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pal.accentColor }} />
                     <span>Positions 4 – {driverList.length}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[11px]" style={{ color: pal.subtextColor }}>
+                  <div className="flex items-center gap-1.5 text-xs font-medium font-body" style={{ color: pal.subtextColor }}>
                     <span>{isDriversExpanded ? 'Hide Standings (P4 – P10)' : 'View Standings (P4 – P10)'}</span>
                     {isDriversExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </div>
@@ -404,7 +408,7 @@ export default function SeasonCard({
                       >
                         <div className="flex items-center gap-3">
                           <span 
-                            className="font-bold w-5"
+                            className="font-medium font-body w-5"
                             style={{ color: pal.subtextColor }}
                           >
                             {d.pos}.
@@ -414,13 +418,13 @@ export default function SeasonCard({
                             style={{ backgroundColor: d.teamColor || '#888' }} 
                           />
                           <span 
-                            className="font-semibold"
+                            className="font-editorial font-normal text-xs sm:text-sm tracking-wide"
                             style={{ color: pal.titleColor }}
                           >
                             {d.name}
                           </span>
                           <span 
-                            className="text-[11px] hidden sm:inline"
+                            className="text-xs font-normal font-body hidden sm:inline"
                             style={{ color: pal.bodyTextColor, opacity: 0.75 }}
                           >
                             ({d.team})
@@ -429,16 +433,16 @@ export default function SeasonCard({
                         
                         <div className="flex items-center gap-4">
                           <span 
-                            className="text-[11px] hidden sm:inline"
+                            className="text-xs font-normal font-body hidden sm:inline"
                             style={{ color: pal.subtextColor }}
                           >
                             {d.wins > 0 ? `${d.wins} wins` : '0 wins'}
                           </span>
                           <span 
-                            className="font-bold"
+                            className="font-editorial font-bold text-xs sm:text-sm tracking-tight"
                             style={{ color: pal.titleColor }}
                           >
-                            {d.points} pts
+                            {d.points} <span className="text-[9px] font-bold uppercase font-body" style={{ color: pal.subtextColor }}>PTS</span>
                           </span>
                         </div>
                       </div>
@@ -468,13 +472,13 @@ export default function SeasonCard({
                 <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: pal.accentColor }} />
                 <div>
                   <h4 
-                    className="font-editorial font-bold text-base"
+                    className="font-editorial text-base sm:text-lg font-normal"
                     style={{ color: pal.titleColor }}
                   >
                     No Constructors' Championship in {year}
                   </h4>
                   <p 
-                    className="mt-1 text-xs sm:text-sm leading-relaxed font-normal"
+                    className="mt-1 text-xs sm:text-sm leading-relaxed font-normal font-body"
                     style={{ color: pal.bodyTextColor }}
                   >
                     Prior to <strong>1958</strong>, Formula 1 was contested exclusively for the Drivers' World Championship. 
@@ -482,7 +486,7 @@ export default function SeasonCard({
                   </p>
                   <button
                     onClick={() => setActiveTab('drivers')}
-                    className="mt-2.5 inline-flex items-center gap-1 text-xs font-semibold hover:underline cursor-pointer"
+                    className="mt-2.5 inline-flex items-center gap-1 text-xs font-semibold font-body hover:underline cursor-pointer"
                     style={{ color: pal.titleColor }}
                   >
                     View {year} Drivers' Championship (P1–P10) →
@@ -522,7 +526,7 @@ export default function SeasonCard({
 
                         <div className="flex-1 text-center sm:text-left">
                           <div 
-                            className="inline-flex items-center gap-2 text-xs font-semibold mb-0.5"
+                            className="inline-flex items-center gap-2 text-xs font-normal font-body mb-0.5"
                             style={{ color: pal.subtextColor }}
                           >
                             <span>Constructors' World Champion</span>
@@ -531,54 +535,58 @@ export default function SeasonCard({
                           </div>
                           
                           <h3 
-                            className="font-editorial text-2xl sm:text-3xl font-normal tracking-tight"
+                            className="font-editorial text-lg sm:text-xl font-normal tracking-wide"
                             style={{ color: pal.titleColor }}
                           >
                             {top3Constructors[0].name}
                           </h3>
                           
-                          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
+                          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2 font-body">
                             <span 
-                              className="text-xs px-3 py-0.5 rounded-full border shadow-2xs"
+                              className="text-xs px-2.5 py-0.5 rounded-full border shadow-2xs font-normal"
                               style={{
                                 backgroundColor: pal.bgSubtle,
                                 borderColor: pal.borderSubtle,
                                 color: pal.bodyTextColor
                               }}
                             >
-                              Winning Chassis: <strong style={{ color: pal.titleColor }}>{heroCar}</strong>
+                              Winning Chassis: <span className="font-medium" style={{ color: pal.titleColor }}>{heroCar}</span>
                             </span>
                           </div>
                         </div>
 
-                        <div 
-                          className="flex sm:flex-col items-center sm:items-end gap-3 sm:gap-0.5 px-4 py-2 sm:p-0 rounded-xl border sm:border-0"
-                          style={{
-                            backgroundColor: pal.bgSubtle,
-                            borderColor: pal.borderSubtle
-                          }}
+                    {/* Champion Points & Telemetry Capsule (Burnt Orange Shade) */}
+                    <div 
+                      className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-3 sm:gap-1.5 px-4 py-2.5 sm:px-4 sm:py-3 rounded-2xl border shadow-md shrink-0 self-stretch sm:self-auto transition-all"
+                      style={{
+                        background: 'linear-gradient(135deg, #C77448 0%, #BB6C43 100%)',
+                        borderColor: 'rgba(255, 255, 255, 0.25)',
+                        boxShadow: '0 6px 18px -3px rgba(187, 108, 67, 0.35), 0 2px 6px rgba(0, 0, 0, 0.05)'
+                      }}
+                    >
+                      <div className="flex items-baseline gap-1.5">
+                        <span 
+                          className="font-editorial text-2xl sm:text-3xl font-bold leading-none tracking-tight text-black"
                         >
-                          <div className="text-right">
-                            <div 
-                              className="text-[10px] uppercase font-bold tracking-wider"
-                              style={{ color: pal.subtextColor }}
-                            >
-                              Points
-                            </div>
-                            <div 
-                              className="font-editorial text-2xl sm:text-3xl font-normal"
-                              style={{ color: pal.titleColor }}
-                            >
-                              {top3Constructors[0].points}
-                            </div>
-                          </div>
-                          <div 
-                            className="text-xs font-bold text-right"
-                            style={{ color: pal.accentColor }}
-                          >
-                            {top3Constructors[0].wins} {top3Constructors[0].wins === 1 ? 'Win' : 'Wins'}
-                          </div>
-                        </div>
+                          {top3Constructors[0].points}
+                        </span>
+                        <span 
+                          className="text-[10px] font-bold uppercase tracking-wider font-body text-black/75"
+                        >
+                          PTS
+                        </span>
+                      </div>
+                      <div 
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold font-body px-2.5 py-0.5 rounded-full border shadow-2xs"
+                        style={{ 
+                          backgroundColor: 'rgba(0, 0, 0, 0.12)',
+                          borderColor: 'rgba(0, 0, 0, 0.22)',
+                          color: '#000000' 
+                        }}
+                      >
+                        <span>{top3Constructors[0].wins} {top3Constructors[0].wins === 1 ? 'Win' : 'Wins'}</span>
+                      </div>
+                    </div>
 
                       </div>
                     </div>
@@ -604,7 +612,7 @@ export default function SeasonCard({
                         />
                         <div className="flex items-center gap-3 pl-1.5">
                           <span 
-                            className="text-xs font-bold w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border"
+                            className="text-xs font-medium font-body w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border"
                             style={{
                               backgroundColor: pal.bgSubtle,
                               borderColor: pal.borderSubtle,
@@ -615,13 +623,13 @@ export default function SeasonCard({
                           </span>
                           <div>
                             <div 
-                              className="font-editorial font-bold text-base leading-tight"
+                              className="font-editorial font-normal text-sm sm:text-base leading-snug tracking-wide"
                               style={{ color: pal.titleColor }}
                             >
                               {c.name}
                             </div>
                             <div 
-                              className="text-xs font-medium mt-0.5"
+                              className="text-xs font-normal font-body mt-0.5"
                               style={{ color: pal.bodyTextColor, opacity: 0.8 }}
                             >
                               {c.nationality}
@@ -630,14 +638,14 @@ export default function SeasonCard({
                         </div>
                         <div className="text-right shrink-0">
                           <div 
-                            className="font-editorial font-bold text-sm"
+                            className="font-editorial font-bold text-sm sm:text-base tracking-tight"
                             style={{ color: pal.titleColor }}
                           >
-                            {c.points} pts
+                            {c.points} <span className="text-[10px] font-bold uppercase font-body" style={{ color: pal.subtextColor }}>PTS</span>
                           </div>
                           <div 
-                            className="text-[10px] font-medium"
-                            style={{ color: pal.subtextColor }}
+                            className="text-xs font-medium font-body"
+                            style={{ color: pal.accentColor }}
                           >
                             {c.wins} {c.wins === 1 ? 'win' : 'wins'}
                           </div>
@@ -655,7 +663,7 @@ export default function SeasonCard({
                   <div className="mt-5">
                     <button
                       onClick={() => setIsConstructorsExpanded(!isConstructorsExpanded)}
-                      className="w-full flex items-center justify-between py-2.5 px-4 rounded-xl border text-xs font-semibold transition-all cursor-pointer"
+                      className="w-full flex items-center justify-between py-2.5 px-4 rounded-xl border text-xs font-medium font-body transition-all cursor-pointer"
                       style={{
                         backgroundColor: pal.bgCard,
                         borderColor: pal.borderSubtle,
@@ -666,7 +674,7 @@ export default function SeasonCard({
                         <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: pal.accentColor }} />
                         <span>Positions 4 – {constructorList.length}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-[11px]" style={{ color: pal.subtextColor }}>
+                      <div className="flex items-center gap-1.5 text-xs font-medium font-body" style={{ color: pal.subtextColor }}>
                         <span>{isConstructorsExpanded ? 'Hide Standings (P4 – P10)' : 'View Standings (P4 – P10)'}</span>
                         {isConstructorsExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                       </div>
@@ -690,7 +698,7 @@ export default function SeasonCard({
                           >
                             <div className="flex items-center gap-3">
                               <span 
-                                className="font-bold w-5"
+                                className="font-medium font-body w-5"
                                 style={{ color: pal.subtextColor }}
                               >
                                 {c.pos}.
@@ -700,13 +708,13 @@ export default function SeasonCard({
                                 style={{ backgroundColor: c.teamColor || '#888' }} 
                               />
                               <span 
-                                className="font-semibold"
+                                className="font-editorial font-normal text-xs sm:text-sm tracking-wide"
                                 style={{ color: pal.titleColor }}
                               >
                                 {c.name}
                               </span>
                               <span 
-                                className="text-[11px] hidden sm:inline"
+                                className="text-xs font-normal font-body hidden sm:inline"
                                 style={{ color: pal.bodyTextColor, opacity: 0.75 }}
                               >
                                 ({c.nationality})
@@ -715,16 +723,16 @@ export default function SeasonCard({
                             
                             <div className="flex items-center gap-4">
                               <span 
-                                className="text-[11px] hidden sm:inline"
+                                className="text-xs font-normal font-body hidden sm:inline"
                                 style={{ color: pal.subtextColor }}
                               >
                                 {c.wins > 0 ? `${c.wins} wins` : '0 wins'}
                               </span>
                               <span 
-                                className="font-bold"
+                                className="font-editorial font-bold text-xs sm:text-sm tracking-tight"
                                 style={{ color: pal.titleColor }}
                               >
-                                {c.points} pts
+                                {c.points} <span className="text-[9px] font-bold uppercase font-body" style={{ color: pal.subtextColor }}>PTS</span>
                               </span>
                             </div>
                           </div>
@@ -751,7 +759,7 @@ export default function SeasonCard({
         />
         <div 
           className="w-2 h-2 rounded-full mt-1 transition-colors" 
-          style={{ backgroundColor: pal.pageBg === '#FFFFFF' ? pal.accentColor : '#FFFFFF' }}
+          style={{ backgroundColor: pal.accentColor || '#BB6C43' }}
         />
       </div>
 

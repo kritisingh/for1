@@ -495,7 +495,7 @@ export default function DriverSketch({ driver = 'kimi', showTag = true, classNam
 
         {/* Floating speech bubble / iconic catchphrase */}
         {showTag && (
-          <div className="absolute -top-3 -right-6 bg-white/95 backdrop-blur-xs border border-stone-300 rounded-full px-2 py-0.5 shadow-2xs text-[9px] font-bold text-stone-800 whitespace-nowrap rotate-6 group-hover:rotate-0 transition-transform">
+          <div className="absolute -top-3 -right-6 bg-white/95 backdrop-blur-xs border border-stone-300 rounded-full px-2.5 py-0.5 shadow-2xs text-xs font-bold font-body text-stone-800 whitespace-nowrap rotate-6 group-hover:rotate-0 transition-transform">
             {data.catchphrase}
           </div>
         )}
@@ -503,11 +503,11 @@ export default function DriverSketch({ driver = 'kimi', showTag = true, classNam
 
       {/* Driver name & badge */}
       {showTag && (
-        <div className="mt-1 text-center max-w-[130px]">
-          <div className="text-[11px] font-bold text-stone-900 tracking-tight leading-tight">
+        <div className="mt-1 text-center max-w-[140px] font-body">
+          <div className="text-xs font-bold text-stone-900 tracking-tight leading-tight">
             {data.name}
           </div>
-          <div className="text-[9px] font-semibold text-stone-500 uppercase tracking-wider mt-0.5">
+          <div className="text-xs font-semibold text-stone-500 uppercase tracking-wider mt-0.5">
             {data.nickname}
           </div>
         </div>

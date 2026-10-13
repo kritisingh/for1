@@ -1,23 +1,71 @@
 @import "tailwindcss";
+@theme {
+  --font-editorial: 'Fraunces', 'Newsreader', Georgia, serif;
+  --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--font-body);
     color: #1C1917;
     background-color: #FFFFFF;
   }
 }
 
 .font-editorial {
-  font-family: 'Fraunces', 'Newsreader', Georgia, serif;
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .font-display {
-  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-display);
 }
 
 .font-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
+}
+
+/* Dynamic Font Presets */
+body[data-font-preset="outfit"],
+[data-font-preset="outfit"] {
+  --font-editorial: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+body[data-font-preset="space-grotesk"],
+[data-font-preset="space-grotesk"] {
+  --font-editorial: 'Space Grotesk', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+body[data-font-preset="instrument-serif"],
+[data-font-preset="instrument-serif"] {
+  --font-editorial: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+body[data-font-preset="syne"],
+[data-font-preset="syne"] {
+  --font-editorial: 'Syne', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+body[data-font-preset="plus-jakarta"],
+[data-font-preset="plus-jakarta"] {
+  --font-editorial: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+body[data-font-preset="fraunces"],
+[data-font-preset="fraunces"] {
+  --font-editorial: 'Fraunces', 'Newsreader', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
 }
 
 /* Crisp Clean Editorial Card (The Pudding Style) */

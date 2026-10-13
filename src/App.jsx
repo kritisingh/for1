@@ -77,10 +77,12 @@ export default function App() {
   const [globalViewMode, setGlobalViewMode] = useState('drivers');
   const [currentYear, setCurrentYear] = useState(latestYear);
   const [seasonCardStyle, setSeasonCardStyle] = useState('glideslope');
-  // Permanently locked in: Oxford Midnight Canvas (User-Selected Favorite)
-  const [seasonCardPalette, setSeasonCardPalette] = useState('oxford-midnight-bg');
+  // Figma Scheme 13: Amber Walnut Espresso Canvas (Active Palette)
+  const [seasonCardPalette, setSeasonCardPalette] = useState('amber-walnut-dark');
+  // Permanent Font Preset: Classic Vintage Journal ('fraunces')
+  const [fontPreset] = useState('fraunces');
 
-  const activePal = SEASON_CARD_PALETTES[seasonCardPalette] || SEASON_CARD_PALETTES['oxford-midnight-bg'];
+  const activePal = SEASON_CARD_PALETTES[seasonCardPalette] || SEASON_CARD_PALETTES['amber-walnut-dark'];
 
   // Permanently locked in: Inertial Air Glide (Aerodynamic smooth inertial scrolling)
   useEffect(() => {
@@ -166,25 +168,24 @@ export default function App() {
 
   return (
     <div 
+      data-font-preset={fontPreset}
       className="min-h-screen relative selection:bg-blue-100 selection:text-blue-900 font-body overflow-x-hidden transition-colors duration-500"
       style={{ 
         backgroundColor: activePal.pageBg || '#FFFFFF',
         color: activePal.bodyTextColor || '#1E40AF'
       }}
     >
-      {/* Top Sticky Header with Theme Palette Switcher */}
+      {/* Top Sticky Header */}
       <Header
         viewMode={globalViewMode}
         setViewMode={setGlobalViewMode}
         onJumpToTop={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         palette={activePal}
-        currentPaletteId={seasonCardPalette}
-        onSelectPalette={setSeasonCardPalette}
       />
 
-      {/* Daylight Atmospheric Sky Background with Royal Blue Atmospheric Glow */}
+      {/* Daylight Atmospheric Sky Background with Amber / Royal Atmospheric Glow */}
       <div className="absolute top-0 left-0 right-0 h-[450px] pointer-events-none overflow-hidden z-0">
-        <DaylightClouds />
+        {activePal.pageTextColor !== '#EBEFEE' && activePal.pageTextColor !== '#FFFFFE' && <DaylightClouds />}
         <div 
           className="absolute -top-32 left-1/2 -translate-x-1/2 w-[40rem] h-[24rem] rounded-full opacity-40 blur-3xl pointer-events-none transition-all duration-700"
           style={{
@@ -208,13 +209,13 @@ export default function App() {
           <div 
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border shadow-2xs transition-colors"
             style={{
-              backgroundColor: activePal.pageBg === '#FFFFFF' ? (activePal.navBg || 'rgba(30, 64, 175, 0.06)') : 'rgba(255, 255, 255, 0.15)',
-              borderColor: activePal.pageBg === '#FFFFFF' ? (activePal.navBorder || 'rgba(30, 64, 175, 0.18)') : 'rgba(255, 255, 255, 0.28)',
-              color: activePal.pageBg === '#FFFFFF' ? (activePal.navText || '#1E3A8A') : '#FFFFFF'
+              backgroundColor: activePal.navBg || 'rgba(74, 65, 60, 0.08)',
+              borderColor: activePal.navBorder || 'rgba(74, 65, 60, 0.18)',
+              color: activePal.pageTextColor || activePal.titleColor || '#4A413C'
             }}
           >
-            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: activePal.pageBg === '#FFFFFF' ? (activePal.accentColor || '#3B82F6') : '#93C5FD' }} />
-            <span className="tracking-[0.2em] uppercase text-[10px] sm:text-[11px] font-bold">
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: activePal.accentColor || '#BB6C43' }} />
+            <span className="tracking-[0.2em] uppercase text-xs font-bold font-body">
               World Champion Archive
             </span>
           </div>

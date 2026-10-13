@@ -55,22 +55,22 @@ export default function RealCarThumbnail({
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className="w-full h-full rounded-xl bg-stone-100/70 flex flex-col items-center justify-center text-center p-1 text-stone-500">
-            <span className="font-semibold text-[11px] text-stone-700 leading-tight truncate max-w-[90%]">
+          <div className="w-full h-full rounded-xl bg-stone-100/70 flex flex-col items-center justify-center text-center p-1 text-stone-500 font-body">
+            <span className="font-semibold text-xs text-stone-700 leading-tight truncate max-w-[90%]">
               {displayChassis}
             </span>
-            <span className="text-[9px] text-stone-400 mt-0.5">{year}</span>
+            <span className="text-xs text-stone-400 mt-0.5">{year}</span>
           </div>
         )}
       </div>
 
       {/* Small Chassis & Team Label - ALWAYS VISIBLE */}
       {showLabel && (
-        <div className="mt-1 text-center max-w-[130px]">
-          <div className="text-[10px] font-bold text-stone-800 tracking-tight leading-tight truncate">
+        <div className="mt-1 text-center max-w-[140px] font-body">
+          <div className="text-xs font-bold text-stone-800 tracking-tight leading-tight truncate">
             {displayChassis}
           </div>
-          <div className="text-[9px] text-stone-400 font-medium truncate">
+          <div className="text-xs text-stone-400 font-medium truncate">
             {displayTeam} • {year}
           </div>
         </div>

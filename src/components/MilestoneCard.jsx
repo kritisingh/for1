@@ -12,13 +12,13 @@ import { SEASON_CARD_PALETTES } from '../data/themeColors';
  * - 100% Soft Sage palette matching SeasonCard and SkyLayerMarker
  */
 
-export default function MilestoneCard({ milestone, palette = 'oxford-midnight-bg' }) {
+export default function MilestoneCard({ milestone, palette = 'amber-walnut-dark' }) {
   const { afterYear, type, badge, title, quote, speaker, description, stats } = milestone;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Active palette tokens
-  const pal = SEASON_CARD_PALETTES[palette] || SEASON_CARD_PALETTES['oxford-midnight-bg'];
+  const pal = SEASON_CARD_PALETTES[palette] || SEASON_CARD_PALETTES['amber-walnut-dark'];
 
   // Clean raw emojis from badge text (e.g. "⚠️ RACE CONTROL CONTROVERSY" -> "RACE CONTROL CONTROVERSY")
   const cleanBadge = (badge || '').replace(/^[^\w\s]+/, '').trim();
@@ -43,7 +43,7 @@ export default function MilestoneCard({ milestone, palette = 'oxford-midnight-bg
       className="w-full max-w-3xl xl:max-w-4xl mx-auto my-6 sm:my-8 select-none"
     >
       <div 
-        className="w-full rounded-2xl border shadow-[0_8px_24px_-6px_rgba(30,58,138,0.08),0_2px_6px_rgba(0,0,0,0.02)] transition-all duration-300 overflow-hidden"
+        className="w-full rounded-2xl border shadow-[0_8px_24px_-6px_rgba(0,0,0,0.06),0_2px_6px_rgba(0,0,0,0.02)] transition-all duration-300 overflow-hidden"
         style={{
           backgroundColor: pal.bg,
           borderColor: pal.border
@@ -65,15 +65,15 @@ export default function MilestoneCard({ milestone, palette = 'oxford-midnight-bg
 
             {/* Teaser Metadata & Headline */}
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-wider" style={{ color: pal.subtextColor }}>
+              <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider font-body" style={{ color: pal.subtextColor }}>
                 <span>{afterYear} Historic Flashpoint</span>
                 <span className="opacity-40">•</span>
                 <span>{cleanBadge}</span>
               </div>
               
-              <div className="font-editorial text-sm sm:text-base font-normal truncate mt-0.5" style={{ color: pal.titleColor }}>
+              <div className="font-editorial text-sm sm:text-base font-normal tracking-wide truncate mt-0.5" style={{ color: pal.titleColor }}>
                 {quote ? (
-                  <span>“{quote}” — <span className="text-xs font-normal opacity-85" style={{ color: pal.subtextColor }}>{title}</span></span>
+                  <span>“{quote}” — <span className="text-xs font-normal font-body opacity-85" style={{ color: pal.subtextColor }}>{title}</span></span>
                 ) : (
                   <span>{title}</span>
                 )}
@@ -87,7 +87,7 @@ export default function MilestoneCard({ milestone, palette = 'oxford-midnight-bg
               e.stopPropagation();
               setIsExpanded(!isExpanded);
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold shrink-0 transition-all shadow-2xs cursor-pointer hover:scale-102"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium font-body shrink-0 transition-all shadow-2xs cursor-pointer hover:scale-102"
             style={{
               backgroundColor: pal.bgCard,
               borderColor: pal.borderSubtle,
@@ -109,21 +109,21 @@ export default function MilestoneCard({ milestone, palette = 'oxford-midnight-bg
             }}
           >
             {quote && speaker && (
-              <div className="mb-2 text-xs font-semibold italic" style={{ color: pal.subtextColor }}>
+              <div className="mb-2 text-xs font-medium italic font-body" style={{ color: pal.subtextColor }}>
                 Quote source: {speaker}
               </div>
             )}
             
-            <p className="text-xs sm:text-sm font-normal leading-relaxed max-w-3xl" style={{ color: pal.bodyTextColor }}>
+            <p className="text-sm font-normal font-body leading-relaxed max-w-3xl" style={{ color: pal.bodyTextColor }}>
               {description}
             </p>
 
             {stats && stats.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3.5 pt-3 border-t" style={{ borderColor: pal.borderSubtle }}>
+              <div className="flex flex-wrap gap-2 mt-3.5 pt-3 border-t font-body" style={{ borderColor: pal.borderSubtle }}>
                 {stats.map((s, idx) => (
                   <span 
                     key={idx} 
-                    className="text-xs px-2.5 py-1 rounded-lg border font-medium shadow-2xs"
+                    className="text-xs px-2.5 py-1 rounded-lg border font-normal shadow-2xs"
                     style={{ 
                       backgroundColor: pal.bgSubtle, 
                       borderColor: pal.borderSubtle, 
@@ -131,7 +131,7 @@ export default function MilestoneCard({ milestone, palette = 'oxford-midnight-bg
                     }}
                   >
                     <span style={{ color: pal.subtextColor }}>{s.label}: </span>
-                    <strong>{s.value}</strong>
+                    <span className="font-medium">{s.value}</span>
                   </span>
                 ))}
               </div>
